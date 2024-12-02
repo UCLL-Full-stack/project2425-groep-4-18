@@ -6,7 +6,7 @@ export type User = {
   password: string;
   role?: Role;
 }
-export type Role = 'lecturer' | 'student';
+export type Role = 'lecturer' | 'student'| 'admin';
 
 export type StatusMessage = {
   message: string;

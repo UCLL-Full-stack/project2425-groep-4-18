@@ -12,7 +12,7 @@
  *          properties:
  *            name:
  *              type: string
- *            firstName:
+ *            firstname:
  *              type: string
  *            password:
  *              type: string
@@ -32,8 +32,11 @@ const userRouter = express.Router();
  * @swagger
  * /users:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all users
- *     tags: [Users]
+ *     tags:
+ *       - Users
  *     responses:
  *       200:
  *         description: The list of users.
@@ -61,8 +64,11 @@ try {
  * @swagger
  * /users/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get user by id
- *     tags: [Users]
+ *     tags:
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: id
@@ -77,6 +83,7 @@ try {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *
  */
 
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
@@ -91,10 +98,13 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 /**
  * @swagger
- * /users:
+ * /users/register:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new user
- *     tags: [Users]
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -112,9 +122,10 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *         description: Some parameters may be invalid
  *       500:
  *         description: Internal error
+ *
  */
 
-userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user:UserInput = req.body;
     const newUser = await userservice.createUser(user);
@@ -128,31 +139,49 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  * @swagger
  * /users/login:
  *   post:
- *     summary: login user
- *     tags: [Users]
+ *     summary: Authenticate a user
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *               password:
+ *                 type: string
  *     responses:
  *       200:
- *         description: The user was successfully login
+ *         description: User successfully authenticated
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 firstname:
+ *                   type: string
+ *                 fullname:
+ *                   type: string
+ *                 role:
+ *                   type: string
  *       400:
- *         description: Some parameters may be invalid
+ *         description: Invalid credentials provided
  *       500:
- *         description: Internal error
+ *         description: Internal server error
  */
+
+
+
 
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user:UserInput = req.body;
-    const newUser = await userservice.loginUser(user);
+    const newUser = await userservice.authenticateUser(user);
     res.json(newUser);
   } catch (error) {
     next(error);

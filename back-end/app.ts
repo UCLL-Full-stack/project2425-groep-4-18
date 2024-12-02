@@ -7,12 +7,22 @@ import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { chatRouter } from './controller/chat.routes';
 import { groupchatRouter } from './controller/groupchat.routes';
+import { expressjwt } from 'express-jwt';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs','/users/login','/status',/^\/api-docs\/.*/,'/users/register'],
+    })
+);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

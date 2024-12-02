@@ -4,7 +4,7 @@ import { GroupChat } from './groupchat';
 
 export class User {
     private id?: number;
-    private role?: string;
+    private role: string;
     private name: string;
     private firstName: string;
     private password: string;
@@ -18,7 +18,7 @@ export class User {
     }) {
         this.validate(user);
         this.id = user.id;
-        this.role = user.role ?? undefined;
+        this.role = user.role || 'student';
         this.name = user.name;
         this.firstName = user.firstName;
         this.password = user.password;
@@ -44,7 +44,7 @@ export class User {
         return this.id;
     }
 
-    public getRole(): string | undefined {
+    public getRole(): string{
         return this.role;
     }
 

@@ -1,5 +1,5 @@
 type Type = 'basic' | 'advanced' | 'max';
-
+type Role = 'lecturer' | 'student'| 'admin';
 type UserInput = {
   id?: number;
   password: string;
@@ -30,12 +30,21 @@ type subscriptionInput = {
   endDate: Date;
 }
 
+type AuthenticationResponse = {
+  token: string;
+  firstname: string;
+  fullname: string;
+  role: Role;
+};
+
 export {
   Type,
   UserInput,
   ChatInput,
   GroupChatInput,
-  subscriptionInput
+  subscriptionInput,
+  AuthenticationResponse,
+  Role
 }
 
 

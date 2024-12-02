@@ -32,8 +32,11 @@ const chatRouter = express.Router();
  * @swagger
  * /chats:
  *   get:
- *     summary: Get all chat
- *     tags: [Chats]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get all chats
+ *     tags:
+ *       - Chats
  *     responses:
  *       200:
  *         description: The list of chats.
@@ -63,9 +66,12 @@ try {
  * @swagger
  * /chats/{id}:
  *   get:
- *     summary: Get a chat by ID.
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a chat by ID
  *     description: Returns a chat object by the provided chat ID.
- *     tags: [Chats]
+ *     tags:
+ *       - Chats
  *     parameters:
  *       - in: path
  *         name: id
@@ -82,7 +88,7 @@ try {
  *             schema:
  *               $ref: '#/components/schemas/Chat'
  *       404:
- *         description: chat not found.
+ *         description: Chat not found.
  */
 chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -100,9 +106,12 @@ chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  * @swagger
  * /chats/user/{id}:
  *   get:
- *     summary: Get a chat by UserID.
- *     description: Returns a chat object by the provided user ID.
- *     tags: [Chats]
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get chats by User ID
+ *     description: Returns chat objects by the provided user ID.
+ *     tags:
+ *       - Chats
  *     parameters:
  *       - in: path
  *         name: id
@@ -110,16 +119,18 @@ chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *         schema:
  *           type: integer
  *           format: int64
- *         description: user ID of the chat to retrieve.
+ *         description: User ID to retrieve chats for.
  *     responses:
  *       200:
- *         description: A chat object.
+ *         description: Chat objects associated with the user.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Chat'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Chat'
  *       404:
- *         description: chat not found.
+ *         description: Chats not found for the user.
  */
 chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -136,8 +147,11 @@ chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFuncti
  * @swagger
  * /chats:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new chat
- *     tags: [Chats]
+ *     tags:
+ *       - Chats
  *     requestBody:
  *       required: true
  *       content:
@@ -146,13 +160,13 @@ chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFuncti
  *             $ref: '#/components/schemas/Chat'
  *     responses:
  *       200:
- *         description: The chat was successfully created
+ *         description: The chat was successfully created.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Chat'
  *       400:
- *         description: Bad request. chat was not created.
+ *         description: Bad request. Chat was not created.
  */
 chatRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

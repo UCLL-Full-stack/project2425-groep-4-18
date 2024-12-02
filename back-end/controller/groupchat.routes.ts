@@ -29,8 +29,11 @@ const groupchatRouter = express.Router();
  * @swagger
  * /groupchats:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all group chats
- *     tags: [GroupChats]
+ *     tags:
+ *       - GroupChats
  *     responses:
  *       200:
  *         description: The list of chats.
@@ -40,6 +43,7 @@ const groupchatRouter = express.Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/GroupChat'
+ *
  */
 
 groupchatRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
@@ -57,8 +61,11 @@ try {
  * @swagger
  * /groupchats/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get group chat by id
- *     tags: [GroupChats]
+ *     tags:
+ *       - GroupChats
  *     parameters:
  *       - in: path
  *         name: id
@@ -76,6 +83,7 @@ try {
  *               $ref: '#/components/schemas/GroupChat'
  *       404:
  *         description: Group chat not found
+ *
  */
 
 groupchatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
@@ -93,8 +101,11 @@ groupchatRouter.get('/:id', async (req: Request, res: Response, next: NextFuncti
  * @swagger
  * /groupchats:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new group chat
- *     tags: [GroupChats]
+ *     tags:
+ *       - GroupChats
  *     requestBody:
  *       required: true
  *       content:

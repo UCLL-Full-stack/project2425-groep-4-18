@@ -1,8 +1,11 @@
 import { de } from 'date-fns/locale';
 import userDB  from '../repository/user.db';
 import { User } from '../model/user';
-import { UserInput } from '../types';
+import { AuthenticationResponse, UserInput, Role } from '../types';
 import { Chat } from '../model/chat';
+import { generateJwtToken } from '../util/jwt';
+import bcrypt from 'bcrypt'
+
 
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
@@ -15,33 +18,46 @@ const getUserById = async ({id}: {id:number}) => {
 }
 const createUser = async (user: UserInput) => {
   console.log(user)
+  if(await userDB.getUserByFirstName(user.firstname) != undefined){
+    throw new Error(`User already exists`)
+  }
+  const hashedpasswd = await bcrypt.hash(user.password,12) 
+
   const newUser = new User({
-    password: user.password,
+    password: hashedpasswd,
     firstName: user.firstname,
     name: user.name,
     role: user.role,
   });
   return userDB.createUser(newUser);
 }
-const getUserByName = async (name: string) => {
-  return userDB.getUserByName(name);
+const getUserByName = async (firstname: string) => {
+  return userDB.getUserByFirstName(firstname);
 }
 
-const loginUser = async (user: UserInput) => {
-  const searchUser = await userDB.getUserByName(user.name);
-  console.log(searchUser);
-  if(searchUser === undefined || searchUser.getPassword() !== user.password) {
-    throw new Error('Invalid credentials');
+const authenticateUser = async ({firstname,password}:{firstname:string,password:string}): Promise<AuthenticationResponse> =>{
+
+
+  const user = await getUserByName(firstname);
+  if(!user){
+      throw new Error(`Invalid credentials`)
   }
-  return searchUser;
+  if(!await bcrypt.compare(password,user.getPassword())){
+      throw new Error(`Invalid credentials`)
+  }
+  return {
+      firstname: user.getFirstName(),
+      token: generateJwtToken({firstname:user.getFirstName(),role:user.getRole()}),
+      fullname: `${user.getFirstName()} ${user.getName()}`,
+      role: user.getRole() as Role
+  }
 }
-
 
 export default
 { 
   getAllUsers,
   getUserById,
   createUser,
-  loginUser,
+  authenticateUser,
   getUserByName
  };
