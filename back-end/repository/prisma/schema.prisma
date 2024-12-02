@@ -8,22 +8,22 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  role      String? 
-  name      String  
-  firstName String  
-  password  String  
-  chats      Chat[]      
-  groupchats GroupChat[]
+  id           Int           @id @default(autoincrement())
+  role         String?
+  name         String
+  firstName    String
+  password     String
+  chats        Chat[]
+  groupchats   GroupChat[]
   Subscription Subscription?
 }
 
 model Chat {
-  id        Int      @id @default(autoincrement())
-  message   String   
-  createdAt DateTime @default(now())
-  userId      Int     
-  user        User      @relation(fields: [userId], references: [id])
+  id        Int         @id @default(autoincrement())
+  message   String
+  createdAt DateTime    @default(now())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
   GroupChat GroupChat[]
 }
 
@@ -32,15 +32,25 @@ model GroupChat {
   createdAt   DateTime @default(now())
   description String
   name        String
-  chats       Chat[]  
-  users       User[]   
+  chats       Chat[]
+  users       User[]
 }
 
 model Subscription {
-  id        Int      @id @default(autoincrement())
-  type      String
-  startDate DateTime
-  endDate   DateTime
-  userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id])
+  id                 Int              @id @default(autoincrement())
+  startDate          DateTime
+  endDate            DateTime
+  userId             Int              @unique
+  user               User             @relation(fields: [userId], references: [id])
+  subscriptionPlanId Int
+  subscriptionPlan   SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+}
+
+model SubscriptionPlan {
+  id           Int            @id @default(autoincrement())
+  type         String         @unique
+  description  String
+  price        Float
+  duration     Int // Duration in days, months, etc.
+  Subscription Subscription[]
 }

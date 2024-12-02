@@ -8,6 +8,7 @@ import { userRouter } from './controller/user.routes';
 import { chatRouter } from './controller/chat.routes';
 import { groupchatRouter } from './controller/groupchat.routes';
 import { expressjwt } from 'express-jwt';
+import { subscriptionRouter } from './controller/subscription.routes';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
@@ -31,6 +32,7 @@ app.get('/status', (req, res) => {
 app.use('/users', userRouter);
 app.use('/chats', chatRouter);
 app.use('/groupchats', groupchatRouter);
+app.use('/subscription', subscriptionRouter);
 
 // error handling
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {

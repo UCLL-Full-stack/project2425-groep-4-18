@@ -7,8 +7,19 @@ import { set } from 'date-fns';
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.subscription.deleteMany();
+    await prisma.subscriptionPlan.deleteMany();
     await prisma.chat.deleteMany();
     await prisma.user.deleteMany();
+    // Create a Subscription Plan
+    const basicPlan = await prisma.subscriptionPlan.create({
+        data: {
+            type: 'Basic Plan',
+            description: 'A basic subscription plan with limited features', // Add description here
+            price: 9.99,
+            duration: 1,
+        },
+    });
 
     const UserJ = await prisma.user.create({
         data: {
@@ -27,7 +38,17 @@ const main = async () => {
             },
         },
     });
+
+    const subscription = await prisma.subscription.create({
+        data: {
+            startDate: new Date('2024-01-01'),
+            endDate: new Date('2024-02-01'),
+            userId: UserJ.id, // Foreign key reference to User
+            subscriptionPlanId: basicPlan.id, // Foreign key reference to SubscriptionPlan
+        },
+    });
 };
+
 
 (async () => {
     try {
