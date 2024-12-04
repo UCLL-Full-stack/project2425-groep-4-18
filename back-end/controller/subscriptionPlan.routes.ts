@@ -7,7 +7,7 @@
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
- *      Subscription:
+ *      SubscriptionPlan:
  *          type: object
  *          properties:
  *            startDate:
@@ -18,18 +18,17 @@
  */
 
 import express, { Request, Response, NextFunction } from 'express';
-import subscriptionService from '../service/subscription.service';
-import { subscriptionInput } from '../types';
-const subscriptionRouter = express.Router();
+import subscriptionPlanService from '../service/subscriptionPlan.service';
+const subscriptionPlanRouter = express.Router();
 
 /**
  * @swagger
- * /subscription:
+ * /subscriptionPlan:
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get all chat
- *     tags: [Subscription]
+ *     summary: Get all subscriptionPlans
+ *     tags: [SubscriptionPlan]
  *     responses:
  *       200:
  *         description: The list of subscription.
@@ -38,16 +37,16 @@ const subscriptionRouter = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Subscription'
+ *                 $ref: '#/components/schemas/SubscriptionPlan'
  */
 
-subscriptionRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+subscriptionPlanRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const subscriptions = await subscriptionService.getAllSubscriptions();
-        res.json(subscriptions);
+        const subscriptionPlans = await subscriptionPlanService.getAllSubscriptionPlans();
+        res.json(subscriptionPlans);
     } catch (error) {
         next(error);
     }
 });
 
-export { subscriptionRouter };
+export { subscriptionPlanRouter };
