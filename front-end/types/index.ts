@@ -12,3 +12,10 @@ export type StatusMessage = {
   message: string;
   type: string;
 }
+
+export type Chat = {
+  id: number;
+  message: string;
+  user: User;
+  createdAt: Date;
+}
