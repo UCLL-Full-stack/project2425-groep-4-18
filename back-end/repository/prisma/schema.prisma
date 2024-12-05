@@ -14,7 +14,6 @@ model User {
   firstName    String
   password     String
   chats        Chat[]
-  groupchats   GroupChat[]
   Subscription Subscription?
 }
 
@@ -33,7 +32,7 @@ model GroupChat {
   description String
   name        String
   chats       Chat[]
-  users       User[]
+
 }
 
 model Subscription {

@@ -37,6 +37,7 @@ const createChat = async (chat: ChatInput) => {
     });
 
 
+
     return chatDB.createChat(newChat);
 }
 export default {

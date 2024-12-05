@@ -9,7 +9,7 @@ const getAllUsers = async (): Promise<User[]> => {
     try {
         const userPrisma = await database.user.findMany({
             include: {
-                groupchats: true,
+                chats: true,
             },
         });
         console.log(userPrisma)
@@ -25,7 +25,7 @@ const getUserById = async (id: number): Promise<User | undefined> => {
         const userPrisma = await database.user.findUnique({
             where: { id },
             include: {
-                groupchats: true
+                chats: true
             },
         });
         return userPrisma ? User.from(userPrisma) : undefined;
@@ -42,7 +42,7 @@ const getUserByFirstName = async (firstname: string): Promise<User | undefined> 
         const userPrisma = await database.user.findFirst({
             where: { firstName: firstname },
             include: {
-                groupchats:true,
+                chats:true,
             },
         });
         return userPrisma ? User.from(userPrisma) : undefined;
@@ -64,7 +64,7 @@ const createUser = async (user: User): Promise<User> => {
 
             },
             include: {
-                groupchats: true 
+                chats: true 
                 
             },
         });

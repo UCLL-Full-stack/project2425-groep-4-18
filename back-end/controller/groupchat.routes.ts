@@ -135,4 +135,61 @@ groupchatRouter.post('/', async (req: Request, res: Response, next: NextFunction
 }
 );
 
+/**
+ * @swagger
+ * /groupchats/{id}/chat:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Add chat to group chat
+ *     tags:
+ *       - GroupChats
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: Group chat id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               chatId:
+ *                 type: integer
+ *             required:
+ *               - chatId
+ *     responses:
+ *       200:
+ *         description: The chat was successfully added to the group chat
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GroupChat'
+ *       404:
+ *         description: Group chat or chat not found
+ *       500:
+ *         description: Some server error
+ */
+
+
+
+
+groupchatRouter.post('/:id/chat', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const groupChatId = parseInt(req.params.id);
+    const chatId = parseInt(req.body.chatId);
+    const groupChat = await groupchatservice.addchattoGroupChat(groupChatId, chatId);
+    res.json(groupChat);
+  } catch (error) {
+    next(error);
+  }
+
+}
+);
+
 export { groupchatRouter };

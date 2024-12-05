@@ -11,7 +11,6 @@ const getAllChats = async (): Promise<Chat[]> => {
                 user: {
                     include: {
                         chats: true,
-                        groupchats: true
                     }
                 }
             }
@@ -31,7 +30,6 @@ const getChatByUserId = async (userId: number): Promise<Chat[]> => {
                 user: {
                     include: {
                         chats: true,
-                        groupchats: true
                     }
                 }
             }
@@ -51,7 +49,6 @@ const getChatById = async (id: number): Promise<Chat | null> => {
                 user: {
                     include: {
                         chats: true,
-                        groupchats: true
                     }
                 }
             }
@@ -69,13 +66,12 @@ const createChat = async (chat: Chat): Promise<Chat> => {
                 message: chat.getMessage(),
                 createdAt: chat.getCreatedAt(),
                 user: {connect: {id: chat.getUser().getId()}
-                }
+                },
             },
             include: {
                 user: {
                     include: {
                         chats: true,
-                        groupchats: true
                     }
                 }
             }

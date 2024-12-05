@@ -134,11 +134,11 @@ chatRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-      const userId = parseInt(req.params.id, 10); // Extract and parse the ID from the path
-      const chat = await chatservice.getChatByUserId({ userId }); // Call the service to get lecturer by ID
-      res.status(200).json(chat); // Return the lecturer data if found
+      const userId = parseInt(req.params.id, 10); 
+      const chat = await chatservice.getChatByUserId({ userId }); 
+      res.status(200).json(chat); 
   } catch (error) {
-      next(error) // Handle errors (e.g., lecturer not found)
+      next(error) 
   }
 });
 

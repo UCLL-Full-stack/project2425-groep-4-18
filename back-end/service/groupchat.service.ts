@@ -4,6 +4,7 @@ import groupChatDB from "../repository/groupchat.db";
 import { User } from "../model/user";
 import userDb from "../repository/user.db";
 import userService from "./user.service";
+import chatDb from "../repository/chat.db";
 
 const getAllGroupChats = async () => groupChatDB.getAllGroupChats();
 
@@ -18,24 +19,6 @@ const getGroupChatById = async ({ id }: { id: number }) => {
 
 const createGroupChat = async (groupChat: GroupChatInput) => {
 
-    const users = await Promise.all(
-        groupChat.users.map(async (userInput) => {
-            const id: number = Number(userInput);
-            console.log(id);
-            if (id === undefined) {
-                throw new Error(`User ID is undefined`);
-            }
-            const user = await userService.getUserById({ id });
-            if (!user) {
-                throw new Error(`User with ID ${id} not found`);
-            }
-            return user;
-        })
-    );
-
-    console.log(users);
-    
-
     const newGroupChat = new GroupChat({
         id: groupChat.id,
         name: groupChat.name,
@@ -43,12 +26,25 @@ const createGroupChat = async (groupChat: GroupChatInput) => {
         createdAt: groupChat.createdAt
     });
 
-    return groupChatDB.createGroupChat(newGroupChat, users);
+    return groupChatDB.createGroupChat(newGroupChat);
 }
+const addchattoGroupChat = async (groupChatId: number, chatId: number) => {
+    const groupChat = await groupChatDB.getGroupChatById(groupChatId);
+    if (!groupChat) {
+        throw new Error(`GroupChat with id ${groupChatId} does not exist.`);
+    }
+    const chat = await chatDb.getChatById(chatId);
+    if (!chat) {
+        throw new Error(`Chat with id ${chatId} does not exist.`);
+    }
+    return groupChatDB.addchattoGroupChat(groupChatId, chatId);
+}
+
 
 
 export default {
     getAllGroupChats,
     getGroupChatById,
-    createGroupChat
+    createGroupChat,
+    addchattoGroupChat
 };

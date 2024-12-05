@@ -29,7 +29,7 @@ export class Chat {
         message,
         createdAt,
         user
-    }: ChatPrisma & { user: UserPrisma & { chats: ChatPrisma[]} }){        
+    }: ChatPrisma & { user: UserPrisma }){        
         return new Chat({
             id,
             message,

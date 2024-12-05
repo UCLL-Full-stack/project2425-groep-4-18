@@ -20,7 +20,7 @@ type GroupChatInput = {
   id?: number;
   name: string;
   description: string;
-  users: UserInput[];
+  
 }
 
 type subscriptionInput = { 

@@ -1,30 +1,33 @@
 
-import { GroupChat as GroupChatPrisma,
-  User as userPrisma
+import { 
+  Chat as ChatPrisma,
+  GroupChat as GroupChatPrisma,
+  User as UserPrisma
 
  } from '@prisma/client';
 import { User } from './user';
+import { Chat } from './chat';
 
 export class GroupChat{
   private id?: number;
   private name: string;
   private description: string;
   private createdAt: Date;
-  private users: User[] = [];
+  private chats: Chat[];
 
   constructor(groupchat: {
     id?: number;
     name: string;
     description: string;
     createdAt: Date;
-    users?: User[];
+    chats?: Chat[];
   }){
     this.validate(groupchat);
     this.id = groupchat.id;
     this.name = groupchat.name;
     this.description = groupchat.description;
     this.createdAt = groupchat.createdAt;
-    this.users = groupchat.users ?? [];
+    this.chats = groupchat.chats ?? [];
   }
 
   public getId(): number | undefined {
@@ -43,12 +46,12 @@ export class GroupChat{
     return this.name;
   }
 
-  public getUsers(): User[] {
-    return this.users;
+  public getChats(): Chat[] {
+    return this.chats;
   }
 
-  public addUser(user: User): void {
-    this.users.push(user);
+  public addChat(chat: Chat): void {
+    this.chats.push(chat);
   }
 
   validate(groupchat: { id?: number; name: string; description: string; createdAt: Date }): void {
@@ -62,14 +65,15 @@ export class GroupChat{
     name,
     description,
     createdAt,
-    users
-  }: GroupChatPrisma & { users: userPrisma[] }){
+    chats,
+}: GroupChatPrisma & { chats: (ChatPrisma & { user: UserPrisma })[] }) {
     return new GroupChat({
         id,
         name,
         description,
         createdAt,
-        users: users.map((user) => User.from(user)),
+        chats: chats.map((chat) => Chat.from(chat)),
     });
-  }
+}
+
 }
