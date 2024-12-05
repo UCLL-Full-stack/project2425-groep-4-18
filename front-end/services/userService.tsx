@@ -13,13 +13,13 @@ const registerUser = (user: User) => {
   })
 }
 
-const loginUser = ({name, password}: {name: string, password: string}) => {
+const loginUser = ({firstname, password}: {firstname: string, password: string}) => {
   return fetch(`${URL}users/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({name, password}),
+    body: JSON.stringify({firstname, password}),
   })
 }
 

@@ -19,3 +19,12 @@ export type Chat = {
   user: User;
   createdAt: Date;
 }
+
+export type SubscriptionPlan = {
+  id: number;
+  type: string;
+  description: string;
+  price: number;
+  duration: number;
+
+}

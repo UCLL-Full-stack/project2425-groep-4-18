@@ -4,14 +4,14 @@ import router from "next/router";
 import React, { useState } from "react";
 
 const LoginForm: React.FC = () => {
-  const [name, setName] = useState("");
+  const [firstname, setName] = useState("");
   const [password, setPassword] = useState("");
   const [statusMessage, setStatusMessage] = useState<StatusMessage>();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = {
-      name,
+      firstname,
       password,
     };
     console.log(user);
@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
     userService.loginUser(user).then(async (response) => {
       if (response.ok) {
         setStatusMessage({ message: "User Logged In", type: "success" });
-        sessionStorage.setItem("user", JSON.stringify({ name }));
+        localStorage.setItem("loggedInUser", JSON.stringify({ firstname: user.firstname }));
         setTimeout(() => {
           router.push("/");
         }, 2000);
@@ -40,7 +40,7 @@ const LoginForm: React.FC = () => {
           <input
             id="name"
             type="text"
-            value={name}
+            value={firstname}
             placeholder="Enter your name"
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

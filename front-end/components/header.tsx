@@ -3,14 +3,18 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Language from "./language/Language";
 
+type UserType = {
+  firstname: string;
+  password: string;
+};
 const Header: React.FC = () => {
 
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
 
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
     if (user) {
-      setLoggedInUser(user);
+      setLoggedInUser(JSON.parse(user));
     }
   }, []);
 
@@ -38,6 +42,12 @@ const Header: React.FC = () => {
           Groupchats
         </Link>
         <Link
+          href="/subscriptionPlan"
+          className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+        >
+          subscription
+        </Link>
+        <Link
           href="/profile"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
@@ -62,7 +72,7 @@ const Header: React.FC = () => {
         )}
         {loggedInUser && (
           <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-            {loggedInUser}
+            {loggedInUser.firstname}
           </div>
         )}
         <div>
