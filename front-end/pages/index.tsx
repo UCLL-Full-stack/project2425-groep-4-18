@@ -17,7 +17,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
+      <Header />
 
       <div className="flex h-screen">
         <div className="w-1/4 bg-gray-200 border-r border-gray-300">
@@ -28,7 +28,7 @@ export default function Home() {
           </ul>
         </div>
 
-        <div className="flex-1 bg-white">
+        <div className="flex-1 bg-white flex flex-col justify-between">
           <div className="p-6">
             <h2 className="text-xl">Chat 1</h2>
             <div className="mt-4">
@@ -39,6 +39,18 @@ export default function Home() {
                 <strong>You:</strong> Hi there!
               </p>
             </div>
+          </div>
+
+          <div className="p-6 flex flex-col justify-end">
+            <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+              text
+            </label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Enter your name"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
         </div>
       </div>
