@@ -36,8 +36,14 @@ app.use('/groupchats', groupchatRouter);
 app.use('/subscription', subscriptionRouter);
 app.use('/subscriptionPlan', subscriptionPlanRouter);
 // error handling
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).json({ message: error.message });
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ status: 'unauthorized', message: err.message });
+    } else if (err.name === 'CoursesError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else {
+        res.status(400).json({ status: 'application error', message: err.message });
+    }
 });
 
 app.listen(port || 3000, () => {

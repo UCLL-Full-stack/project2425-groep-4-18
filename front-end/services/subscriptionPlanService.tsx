@@ -1,9 +1,11 @@
 const getAllSubscriptionPlans = () => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
   return fetch(process.env.NEXT_PUBLIC_API_URL + "/subscriptionPlan", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      // Add token here
+        Authorization: `Bearer ${token}`,
     },
   });
 };

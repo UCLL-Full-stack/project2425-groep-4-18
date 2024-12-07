@@ -7,11 +7,9 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 const Register: React.FC = () => {
-  const [subscriptionPlans, setsubscriptionPlans] =
-    useState<Array<SubscriptionPlan>>();
+  const [subscriptionPlans, setsubscriptionPlans] = useState<Array<SubscriptionPlan>>();
   const [error, setError] = useState<string>();
-  const [selectedSubscriptioPlan, setSelectedSubscriptionPlan] =
-    useState<SubscriptionPlan | null>(null);
+  const [selectedSubscriptioPlan, setSelectedSubscriptionPlan] = useState<SubscriptionPlan | null>(null);
 
   const getSubscriptionplans = async () => {
     setError("");

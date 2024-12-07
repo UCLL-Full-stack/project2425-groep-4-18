@@ -10,7 +10,7 @@ export type Role = 'lecturer' | 'student'| 'admin';
 
 export type StatusMessage = {
   message: string;
-  type: string;
+  type: "error" | "success";
 }
 
 export type Chat = {
