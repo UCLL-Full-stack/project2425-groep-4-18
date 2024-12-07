@@ -17,45 +17,48 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
 
-      <div className="flex h-screen">
-        <div className="w-1/4 bg-gray-200 border-r border-gray-300">
-          <ul>
-            <li className="p-4 border-b border-gray-300">Chat 1</li>
-            <li className="p-4 border-b border-gray-300">Chat 2</li>
-            <li className="p-4 border-b border-gray-300">Chat 3</li>
-          </ul>
-        </div>
-
-        <div className="flex-1 bg-white flex flex-col">
-          {/* Chat Content */}
-          <div className="p-6 flex-grow overflow-y-auto">
-            <h2 className="text-xl">Chat 1</h2>
-            <div className="mt-4">
-              <p>
-                <strong>User 1:</strong> Hello!
-              </p>
-              <p>
-                <strong>You:</strong> Hi there!
-              </p>
-            </div>
+      <div className="flex flex-col h-screen">
+        {/* Header */}
+        <Header />
+        <div className="flex flex-1">
+          <div className="w-1/4 bg-gray-200 border-r border-gray-300">
+            <ul>
+              <li className="p-4 border-b border-gray-300">Chat 1</li>
+              <li className="p-4 border-b border-gray-300">Chat 2</li>
+              <li className="p-4 border-b border-gray-300">Chat 3</li>
+            </ul>
           </div>
 
-          {/* Input Field */}
-          <div className="p-6 border-t border-gray-300">
-            <label
-              htmlFor="message"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Message
-            </label>
-            <input
-              id="message"
-              type="text"
-              placeholder="Type a message"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="flex-1 bg-white flex flex-col">
+            {/* Chat Content */}
+            <div className="p-6 flex-grow overflow-y-auto">
+              <h2 className="text-xl">Chat 1</h2>
+              <div className="mt-4">
+                <p>
+                  <strong>User 1:</strong> Hello!
+                </p>
+                <p>
+                  <strong>You:</strong> Hi there!
+                </p>
+              </div>
+            </div>
+
+            {/* Input Field */}
+            <div className="p-6 border-t border-gray-300">
+              <label
+                htmlFor="message"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                Message
+              </label>
+              <input
+                id="message"
+                type="text"
+                placeholder="Type a message"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
         </div>
       </div>
