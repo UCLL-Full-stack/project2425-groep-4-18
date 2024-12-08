@@ -6,21 +6,21 @@ export class User {
     private id?: number;
     private role: string;
     private name: string;
-    private firstName: string;
+    private firstname: string;
     private password: string;
 
     constructor(user: {
         id?: number;
         role?: string | null;
         name: string;
-        firstName: string;
+        firstname: string;
         password: string;
     }) {
         this.validate(user);
         this.id = user.id;
         this.role = user.role || 'student';
         this.name = user.name;
-        this.firstName = user.firstName;
+        this.firstname = user.firstname;
         this.password = user.password;
     }
 
@@ -28,14 +28,14 @@ export class User {
         id,
         role,
         name,
-        firstName,
+        firstname,
         password,
     }: UserPrisma ) {
         return new User({
             id,
             role,
             name,
-            firstName,
+            firstname,
             password,
         });
     }
@@ -48,12 +48,12 @@ export class User {
         return this.role;
     }
 
-    public getName(): string {
+    public getname(): string {
         return this.name;
     }
 
-    public getFirstName(): string {
-        return this.firstName;
+    public getFirstname(): string {
+        return this.firstname;
     }
 
     public getPassword(): string {
@@ -66,8 +66,8 @@ export class User {
     equals(user: User): boolean {
         return (
             this.id === user.getId() &&
-            this.name === user.getName() &&
-            this.firstName === user.getFirstName() &&
+            this.name === user.getname() &&
+            this.firstname === user.getFirstname() &&
             this.password === user.getPassword() &&
             this.role === user.getRole()
             
@@ -78,13 +78,13 @@ export class User {
         id?: number;
         role?: string | null;
         name: string;
-        firstName: string;
+        firstname: string;
         password: string;
     }): void {
         if (!user.name || user.name.trim() === '') {
             throw new Error('User name is required');
         }
-        if (!user.firstName || user.firstName.trim() === '') {
+        if (!user.firstname || user.firstname.trim() === '') {
             throw new Error('User first name is required');
         }
         if (!user.password || user.password.trim() === '') {

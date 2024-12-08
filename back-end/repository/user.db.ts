@@ -37,10 +37,10 @@ const getUserById = async (id: number): Promise<User | undefined> => {
     }
 };
 
-const getUserByFirstName = async (firstname: string): Promise<User | undefined> => {
+const getUserByFirstname = async (firstname: string): Promise<User | undefined> => {
     try{
         const userPrisma = await database.user.findFirst({
-            where: { firstName: firstname },
+            where: { firstname: firstname },
             include: {
                 chats:true,
             },
@@ -57,8 +57,8 @@ const createUser = async (user: User): Promise<User> => {
     try {
         const userPrisma = await database.user.create({
             data: {
-                name: user.getName(),
-                firstName: user.getFirstName(),
+                name: user.getname(),
+                firstname: user.getFirstname(),
                 password: user.getPassword(),
                 role: user.getRole(),
 
@@ -76,4 +76,4 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
-export default { getAllUsers, getUserById, createUser, getUserByFirstName };
+export default { getAllUsers, getUserById, createUser, getUserByFirstname };

@@ -92,9 +92,29 @@ const addchattoGroupChat = async (groupChatid:number, chatid: number): Promise<G
     }
 }
 
+const getGroupchatbyFirstname = async (firstname: string) => {
+    try {
+        const groupChatPrisma = await database.groupChat.findMany({
+            where: { chats: { some: { user: { firstname: firstname } } } },
+            include: { 
+                chats: {
+                    include: {
+                        user: true,
+                    },
+                },
+             },
+        });
+        return groupChatPrisma.map((groupChatPrisma) => GroupChat.from(groupChatPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllGroupChats,
     getGroupChatById,
     createGroupChat,
     addchattoGroupChat,
+    getGroupchatbyFirstname
 };

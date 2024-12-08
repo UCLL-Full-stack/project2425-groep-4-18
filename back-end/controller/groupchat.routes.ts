@@ -192,4 +192,50 @@ groupchatRouter.post('/:id/chat', async (req: Request, res: Response, next: Next
 }
 );
 
+/**
+ * @swagger
+ * /groupchats/user:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get group chats by user firstname
+ *     tags:
+ *       - GroupChats
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *                 description: The firstname of the user whose group chats you want to fetch
+ *             required:
+ *               - firstname
+ *     responses:
+ *       200:
+ *         description: List of group chats for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/GroupChat'
+ */
+
+
+
+groupchatRouter.post('/user', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { firstname } = req.body;
+    console.log(firstname);
+    const groupchats = await groupchatservice.getGroupchatbyFirstname(firstname);
+    res.json(groupchats);
+  } catch (error) {
+    next(error);
+  }
+}
+);
+
 export { groupchatRouter };

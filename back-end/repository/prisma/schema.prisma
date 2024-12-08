@@ -11,7 +11,7 @@ model User {
   id           Int           @id @default(autoincrement())
   role         String?
   name         String
-  firstName    String
+  firstname    String
   password     String
   chats        Chat[]
   Subscription Subscription?

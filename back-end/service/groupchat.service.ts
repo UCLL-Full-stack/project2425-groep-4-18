@@ -40,11 +40,21 @@ const addchattoGroupChat = async (groupChatId: number, chatId: number) => {
     return groupChatDB.addchattoGroupChat(groupChatId, chatId);
 }
 
+const getGroupchatbyFirstname = async (firstname: string) => {
+    const user = await userDb.getUserByFirstname(firstname);
+    if (!user) {
+        throw new Error(`User with firstname ${firstname} does not exist.`);
+    }
+    console.log(user);
+    return groupChatDB.getGroupchatbyFirstname(firstname);
+}
+
 
 
 export default {
     getAllGroupChats,
     getGroupChatById,
     createGroupChat,
-    addchattoGroupChat
+    addchattoGroupChat,
+    getGroupchatbyFirstname
 };

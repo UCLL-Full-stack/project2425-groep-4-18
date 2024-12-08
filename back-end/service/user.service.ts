@@ -18,21 +18,21 @@ const getUserById = async ({id}: {id:number}) => {
 }
 const createUser = async (user: UserInput) => {
   console.log(user)
-  if(await userDB.getUserByFirstName(user.firstname) != undefined){
+  if(await userDB.getUserByFirstname(user.firstname) != undefined){
     throw new Error(`User already exists`)
   }
   const hashedpasswd = await bcrypt.hash(user.password,12) 
 
   const newUser = new User({
     password: hashedpasswd,
-    firstName: user.firstname,
+    firstname: user.firstname,
     name: user.name,
     role: user.role,
   });
   return userDB.createUser(newUser);
 }
 const getUserByName = async (firstname: string) => {
-  return userDB.getUserByFirstName(firstname);
+  return userDB.getUserByFirstname(firstname);
 }
 
 const authenticateUser = async ({firstname,password}:{firstname:string,password:string}): Promise<AuthenticationResponse> =>{
@@ -46,9 +46,9 @@ const authenticateUser = async ({firstname,password}:{firstname:string,password:
       throw new Error(`Invalid credentials`)
   }
   return {
-      firstname: user.getFirstName(),
-      token: generateJwtToken({firstname:user.getFirstName(),role:user.getRole()}),
-      fullname: `${user.getFirstName()} ${user.getName()}`,
+      firstname: user.getFirstname(),
+      token: generateJwtToken({firstname:user.getFirstname(),role:user.getRole()}),
+      fullname: `${user.getFirstname()} ${user.getname()}`,
       role: user.getRole() as Role
   }
 }
