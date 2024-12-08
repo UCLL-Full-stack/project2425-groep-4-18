@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Language from "./language/Language";
+import router from "next/router";
 
 type UserType = {
   firstname: string;
@@ -15,6 +16,9 @@ const Header: React.FC = () => {
     const user = localStorage.getItem("loggedInUser");
     if (user) {
       setLoggedInUser(JSON.parse(user));
+    } else {
+      // Redirect to login page if no user is found in localStorage
+      router.push("/login");
     }
   }, []);
 
