@@ -46,7 +46,8 @@ export default function Home() {
 
   console.log(user?.firstname);
   const { data, isLoading, error } = useSWR("groupchats", fetcher);
-  console.log(data);
+  
+  console.log(selectedGroupChat)
 
   return (
     <>
@@ -78,16 +79,29 @@ export default function Home() {
         <div className="ml-[25%] flex-1 flex flex-col h-full">
           {/* Scrollable Chat Content */}
           <div className="flex-grow overflow-y-auto p-6">
-            <h2 className="text-xl mb-4">Chat 1</h2>
-            <div>
-              <p>
-                <strong>User 1:</strong> Hello!
-              </p>
-              <p>
-                <strong>You:</strong> Hi there!
-              </p>
-              
+            <div className="flex flex-col gap-4">
+              {selectedGroupChat && (
+                <div className="flex flex-col gap-4">
+                  {selectedGroupChat.chats.map((chat, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 border rounded-md ${
+                        chat.user.firstname === user?.firstname
+                          ? "bg-blue-200 self-end"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      <div className="text-sm font-medium">
+                        {chat.user.firstname}
+                      </div>
+                      <div className="text-lg">{chat.message}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+
+
           </div>
 
           <div className="p-6 border-t border-gray-300">
