@@ -19,7 +19,7 @@ export default function Home() {
       </Head>
 
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-10 bg-white shadow-md">
+      <div className="fixed top-0 left-0 w-full z-10">
         <Header />
       </div>
 
@@ -45,17 +45,19 @@ export default function Home() {
               <p>
                 <strong>You:</strong> Hi there!
               </p>
-              {[...Array(30)].map((_, i) => (
-                <p key={i}>
-                  <strong>User {i % 2 ? "1" : "You"}:</strong> Message {i + 1}
-                </p>
-              ))}
+              
             </div>
           </div>
 
-          {/* Sticky Input Field */}
-          <div className="p-4 border-t border-gray-300 bg-white">
+          <div className="p-6 border-t border-gray-300">
+            <label
+              htmlFor="message"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Message
+            </label>
             <input
+              id="message"
               type="text"
               placeholder="Type a message"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
