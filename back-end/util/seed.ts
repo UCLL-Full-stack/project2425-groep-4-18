@@ -26,7 +26,7 @@ const main = async () => {
             id: 1,
             role: 'user', // or 'admin' if needed
             name: 'Doe',
-            firstName: 'John',
+            firstname: 'John',
             password: await bcrypt.hash('password', 12),
             chats: {
                 create: [

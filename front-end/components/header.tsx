@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Language from "./language/Language";
 import router from "next/router";
+import { verify, JwtPayload } from "jsonwebtoken";
 
 type UserType = {
   firstname: string;
   password: string;
+  token: string;
 };
 const Header: React.FC = () => {
-
   const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
 
   useEffect(() => {
@@ -22,6 +23,25 @@ const Header: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (loggedInUser && isTokenExpired()) {
+        // Token has expired, log out immediately
+        localStorage.removeItem("loggedInUser");
+        setLoggedInUser(null);
+        router.push("/login"); // Optionally redirect to login page
+      }
+    }, 1000); // Check every second for token expiry
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, [loggedInUser]);
+  
+  function isTokenExpired() {
+    const expiry = JSON.parse(atob(loggedInUser!.token.split(".")[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
+  }
+
   const handleClick = () => {
     localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
@@ -29,9 +49,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="p-3 border-bottom bg-gradient-to-br from-gray-900 to-gray-600 flex flex-col items-center">
-      <a className="flex mb-2 md:mb-5 text-white-50 text-3xl text-gray-300">
-        
-      </a>
+      <a className="flex mb-2 md:mb-5 text-white-50 text-3xl text-gray-300"></a>
       <nav className="items-center flex md:flex-row flex-col">
         <Link
           href="/"
@@ -83,7 +101,6 @@ const Header: React.FC = () => {
           <Language />
         </div>
       </nav>
-
     </header>
   );
 };
