@@ -60,10 +60,11 @@ export class Subscription {
     public getUser(): User {
         return this.user;
     }
-    
+
     public getSubcriptionPlan(): SubscriptionPlan {
         return this.subscriptionPlan;
     }
+
 
     equals(subscription: Subscription): boolean {
         return (
@@ -78,5 +79,5 @@ export class Subscription {
         if (subscription.startDate > subscription.endDate) {
             throw new Error('subscription end date cannot be before startdate');
         }
-    } 
+    }
 }

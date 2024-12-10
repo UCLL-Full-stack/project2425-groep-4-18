@@ -25,9 +25,18 @@ type GroupChatInput = {
 
 type subscriptionInput = { 
   id?: number;
-  type: Type;
   startDate: Date;
   endDate: Date;
+  user: UserInput;
+  subscriptionPlan: SubscriptionPlanInput
+}
+
+type SubscriptionPlanInput = { 
+  id?: number;
+  type: Type;
+  description: string;
+  price: number;
+  duration: number
 }
 
 type AuthenticationResponse = {

@@ -11,4 +11,16 @@ const getAllSubscriptionPlans = async (): Promise<SubscriptionPlan[]> => {
     }
 };
 
-export default { getAllSubscriptionPlans };
+const getSubscriptionPlansbyId = async (id: number) => {
+    try {
+        const SubscriptionPlanPrisma = await database.subscriptionPlan.findUnique({
+            where: { id },
+        });
+        return SubscriptionPlanPrisma ? SubscriptionPlan.from(SubscriptionPlanPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+export default { getAllSubscriptionPlans, getSubscriptionPlansbyId };
