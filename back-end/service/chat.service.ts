@@ -19,15 +19,15 @@ const getChatById = async ({ id }: { id: number }) => {
     return chat
 };
 const createChat = async (chat: ChatInput) => {
-    console.log(chat)
+    console.log("User :" + chat.user)
 
-    if (chat.userId === undefined) {
+    if (chat.user === undefined) {
         throw new Error(`User ID is undefined.`);
     }
-    const user = await userDb.getUserById(chat.userId);
+    const user = await userDb.getUserByFirstname(chat.user);
     console.log("test "+user?.getname())
     if (user === null || user === undefined) {
-        throw new Error(`User with id ${chat.userId} does not exist.`);
+        throw new Error(`User with id ${chat.user} does not exist.`);
     }
 
     const newChat = new Chat({

@@ -171,9 +171,10 @@ chatRouter.get('/user/:id', async (req: Request, res: Response, next: NextFuncti
 chatRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
       const chat:ChatInput = req.body;
+      console.log(req.body);
       const newChat = await chatservice.createChat(chat);
       
-      res.status(200).json(chat); 
+      res.status(200).json(newChat); 
   } catch (error) {
       next(error) 
   }

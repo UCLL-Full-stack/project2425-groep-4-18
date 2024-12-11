@@ -12,6 +12,11 @@ export type StatusMessage = {
   message: string;
   type: "error" | "success";
 }
+export type ChatInput = {
+  message: string;
+  user: string;
+  createdAt: Date;
+}
 
 export type Chat = {
   id: number;
@@ -19,6 +24,13 @@ export type Chat = {
   user: User;
   createdAt: Date;
 }
+
+export type GroupChatInput = {
+  name: string;
+  createdAt?: Date;
+  description: string;
+}
+
 export type GroupChat = {
   id: number;
   name: string;

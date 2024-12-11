@@ -13,7 +13,7 @@ type ChatInput = {
   createdAt: Date;
   id?: number;
   message: string;
-  userId: number;
+  user: string;
 }
 type GroupChatInput = {
   createdAt: Date;

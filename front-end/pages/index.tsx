@@ -1,53 +1,113 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import { GroupChat, User } from "@/types";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import ChatOverview from "@/components/chats/chatsoverview";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import groupchatservice from "@/services/groupchatService";
+import chatService from "@/services/chatService";
+import { Chat, ChatInput, GroupChat, User } from "@/types";
+import useInterval from "use-interval";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-
-  const [groupchats, setGroupChats] = useState<Array<GroupChat>>([]);
   const [selectedGroupChat, setSelectedGroupChat] = useState<GroupChat | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const user = window.localStorage.getItem("loggedInUser");
-    console.log(user);
-    if (user) {
-      setUser(JSON.parse(user));
+    const storedUser = window.localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing logged in user:", error);
+      }
     }
-    
   }, []);
 
   const selectGroupChat = (groupchat: GroupChat) => {
     setSelectedGroupChat(groupchat);
   };
 
-
-  const fetcher = async (key: string) => {
-    if (!user?.firstname) {
-      throw new Error("User firstname is undefined");
+  const groupfetcher = async () => {
+    if (!user?.firstname) return null;
+    try {
+      const res = await groupchatservice.getGroupchats(user.firstname);
+      if (res.ok) {
+        return { groupchats: await res.json() };
+      }
+    } catch (error) {
+      console.error("Error fetching group chats:", error);
     }
-    console.log("firstname "+ user?.firstname);
-    const res = await groupchatservice.getGroupchats(user.firstname);
-    console.log(res);
-    if (res.ok) {
-        const groupchat = await res.json();
-        return { groupchats: groupchat };
-    }
-  }
+    return null;
+  };
 
-  console.log(user?.firstname);
-  const { data, isLoading, error } = useSWR("groupchats", fetcher);
+
+
+  const { data, isLoading, error } = useSWR("groupchats", groupfetcher);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedGroupChat || !user?.firstname) return;
   
-  console.log(selectedGroupChat)
+    const form = event.currentTarget;
+    const input = form.querySelector("input");
+  
+    if (input && input.value) {
+      const message = input.value;
+  
+      const chat: ChatInput = {
+        message,
+        user: user.firstname,
+        createdAt: new Date(),
+      };
+  
+      try {
+        const res = await chatService.addChat(chat);
+        if (res.ok) {
+          const newChat: Chat = await res.json();
+          const resGroupChat = await groupchatservice.addchat(selectedGroupChat.id, newChat.id);
+          if (resGroupChat.ok) {
+            const updatedGroupChat: GroupChat = await resGroupChat.json();
+            setSelectedGroupChat((prev) =>
+              prev ? { ...prev, chats: [...prev.chats, newChat] } : prev
+            );
+            mutate("groupchats", (currentData: any) => {
+              if (currentData) {
+                return {
+                  groupchats: currentData.groupchats.map((group: GroupChat) =>
+                    group.id === updatedGroupChat.id ? updatedGroupChat : group
+                  ),
+                };
+              }
+              return currentData;
+            });
+              input.value = "";
+          } 
+        }
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
+
+  useInterval(() => {
+    mutate("groupchats", (currentData: any) => {
+      if (currentData && selectedGroupChat) {
+        // Find the updated group chat
+        const updatedGroupChat = currentData.groupchats.find(
+          (group: GroupChat) => group.id === selectedGroupChat.id
+        );
+  
+        // Update the selectedGroupChat state if necessary
+        if (updatedGroupChat) {
+          setSelectedGroupChat(updatedGroupChat);
+        }
+      }
+      return currentData;
+    });
+  }, 1000);
 
   return (
     <>
@@ -66,13 +126,11 @@ export default function Home() {
       <div className="flex h-screen pt-[4rem]">
         {/* Fixed Sidebar */}
         <div className="w-1/4 bg-gray-200 border-r border-gray-300 fixed top-[4rem] bottom-0">
-        <div className="w-1/4 bg-gray-200 border-r border-gray-300 fixed top-[4rem] bottom-0">
           <ChatOverview
             groupchats={data?.groupchats || []}
             selectGroupChat={selectGroupChat}
-            selectedGroupChat={selectedGroupChat} // Pass selectedGroupChat to ChatOverview
+            selectedGroupChat={selectedGroupChat}
           />
-        </div>
         </div>
 
         {/* Main Chat Area */}
@@ -80,43 +138,41 @@ export default function Home() {
           {/* Scrollable Chat Content */}
           <div className="flex-grow overflow-y-auto p-6">
             <div className="flex flex-col gap-4">
-              {selectedGroupChat && (
-                <div className="flex flex-col gap-4">
-                  {selectedGroupChat.chats.map((chat, index) => (
-                    <div
-                      key={index}
-                      className={`p-4 border rounded-md ${
-                        chat.user.firstname === user?.firstname
-                          ? "bg-blue-200 self-end"
-                          : "bg-gray-200"
-                      }`}
-                    >
-                      <div className="text-sm font-medium">
-                        {chat.user.firstname}
-                      </div>
-                      <div className="text-lg">{chat.message}</div>
-                    </div>
-                  ))}
-                </div>
+              {selectedGroupChat ? (
+                selectedGroupChat.chats.map((chat, index) => (
+                  <div
+                    key={index}
+                    className={`p-4 border rounded-md ${
+                      chat.user.firstname === user?.firstname
+                        ? "bg-blue-200 self-end"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    <div className="text-sm font-medium">{chat.user.firstname}</div>
+                    <div className="text-lg">{chat.message}</div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500">Select a group chat to view messages.</div>
               )}
             </div>
-
-
           </div>
 
+          {/* Input Area */}
           <div className="p-6 border-t border-gray-300">
-            <label
-              htmlFor="message"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Message
-            </label>
-            <input
-              id="message"
-              type="text"
-              placeholder="Type a message"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Type a message..."
+                className="w-full p-4 border rounded-md"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white p-4 rounded-md mt-4"
+              >
+                Send
+              </button>
+            </form>
           </div>
         </div>
       </div>
