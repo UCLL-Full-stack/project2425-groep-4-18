@@ -11,16 +11,6 @@ type Props = {
 
 
 const ChatOverview: React.FC<Props> = ({ groupchats, selectGroupChat, selectedGroupChat }: Props) => {
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const user = sessionStorage.getItem("loggedInUser");
-    if (user) {
-      setLoggedInUser(JSON.parse(user));
-    }
-    console.log(loggedInUser);
-  }, []);
-
   return (
     <div className="w-1/4 bg-gray-200 border-r border-gray-300 fixed top-[4rem] bottom-0">
       <ul className="h-full overflow-y-auto">

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Language from "./language/Language";
 import router from "next/router";
-import { verify, JwtPayload } from "jsonwebtoken";
 
 type UserType = {
   firstname: string;
@@ -58,16 +57,16 @@ const Header: React.FC = () => {
           Home
         </Link>
         <Link
-          href="/groupchats"
-          className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-        >
-          Groupchats
-        </Link>
-        <Link
           href="/subscriptionPlan"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
           subscription
+        </Link>
+        <Link
+          href="/create"
+          className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+        >
+          create
         </Link>
         <Link
           href="/profile"
