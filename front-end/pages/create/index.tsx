@@ -4,6 +4,7 @@ import CreateChatForm from '@/components/chats/createchatform';
 import { User, GroupChat } from '@/types'; // Import types
 import userService from '@/services/userService';
 import groupchatservice from '@/services/groupchatService';
+import Header from '@/components/header';
 
 // Fetcher function to get the users
 const fetchUsers = async (): Promise<User[]> => {
@@ -55,7 +56,9 @@ const CreateChatPage: React.FC = () => {
 
   return (
     <>
-      {/* Pass the fetched users and group chats to the CreateChatForm component */}
+      <div>
+        <Header />
+      </div>
       <CreateChatForm users={users || []}/>
     </>
   );

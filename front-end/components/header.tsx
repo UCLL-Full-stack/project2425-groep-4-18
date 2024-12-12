@@ -63,6 +63,12 @@ const Header: React.FC = () => {
           subscription
         </Link>
         <Link
+          href="/create"
+          className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+        >
+          create
+        </Link>
+        <Link
           href="/profile"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >

@@ -44,5 +44,11 @@ export type SubscriptionPlan = {
   description: string;
   price: number;
   duration: number;
+}
 
+export type SessionUser = {
+  token: string;
+  fullname: string;
+  firstname: string;
+  role: Role;
 }

@@ -6,14 +6,14 @@ import ChatOverview from "@/components/chats/chatsoverview";
 import useSWR, { mutate } from "swr";
 import groupchatservice from "@/services/groupchatService";
 import chatService from "@/services/chatService";
-import { Chat, ChatInput, GroupChat, User } from "@/types";
+import { Chat, ChatInput, GroupChat, SessionUser, User } from "@/types";
 import useInterval from "use-interval";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [selectedGroupChat, setSelectedGroupChat] = useState<GroupChat | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
     const storedUser = window.localStorage.getItem("loggedInUser");
