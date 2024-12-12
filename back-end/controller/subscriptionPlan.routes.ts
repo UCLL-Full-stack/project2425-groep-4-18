@@ -49,4 +49,41 @@ subscriptionPlanRouter.get('/', async (req: Request, res: Response, next: NextFu
     }
 });
 
+/**
+ * @swagger
+ * /subscriptionPlan/{id}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get SubscriptionPlan by id
+ *     tags:
+ *       - SubscriptionPlan
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: SubscriptionPlan id
+ *     responses:
+ *       200:
+ *         description: The SubscriptionPlan description by id.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SubscriptionPlan'
+ *
+ */
+
+subscriptionPlanRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const user = await subscriptionPlanService.getSubscriptionPlanId({id: id});
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  });
+
 export { subscriptionPlanRouter };
+

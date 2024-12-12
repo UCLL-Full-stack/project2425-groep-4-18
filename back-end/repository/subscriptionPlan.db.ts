@@ -11,7 +11,7 @@ const getAllSubscriptionPlans = async (): Promise<SubscriptionPlan[]> => {
     }
 };
 
-const getSubscriptionPlansbyId = async (id: number) => {
+const getSubscriptionPlanbyId = async (id: number) => {
     try {
         const SubscriptionPlanPrisma = await database.subscriptionPlan.findUnique({
             where: { id },
@@ -23,4 +23,4 @@ const getSubscriptionPlansbyId = async (id: number) => {
     }
 }
 
-export default { getAllSubscriptionPlans, getSubscriptionPlansbyId };
+export default { getAllSubscriptionPlans, getSubscriptionPlanbyId };

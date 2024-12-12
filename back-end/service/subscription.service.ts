@@ -15,20 +15,21 @@ const getAllSubscriptions = async (): Promise<Subscription[]> =>
     subscriptionDb.getAllSubscriptions();
 
 const createSubscriptions = async ({
-    startDate,
     user: UserInput,
     subscriptionPlan: SubscriptionPlanInput,
 }: subscriptionInput): Promise<Subscription> => {
     if (!SubscriptionPlanInput.id) throw new Error('Subscription id is required');
     if (!UserInput.id) throw new Error('User id is required');
     const user = await userDb.getUserById(UserInput.id);
-    const subscriptionPlan = await subscriptionPlanDb.getSubscriptionPlansbyId(
+    const subscriptionPlan = await subscriptionPlanDb.getSubscriptionPlanbyId(
         SubscriptionPlanInput.id
     );
 
     if (!user) throw new Error('User not found');
     if (!subscriptionPlan) throw new Error('subscriptionPlan not found');
 
+
+    const startDate = new Date()
     const endDate = calculateEndDate(startDate, subscriptionPlan.getDuration())
     const subscription = new Subscription({ startDate, endDate, user, subscriptionPlan });
     return await subscriptionDb.createSubscription(subscription);

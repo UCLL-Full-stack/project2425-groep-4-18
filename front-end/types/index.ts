@@ -26,6 +26,15 @@ export type GroupChat = {
   createdAt: Date;
 }
 
+export type Subscription = {
+  id?: number;
+  startDate?: string;
+  endDate?: string;
+  user: User;
+  subscriptionPlan: SubscriptionPlan;
+
+}
+
 export type SubscriptionPlan = {
   id: number;
   type: string;
