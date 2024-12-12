@@ -15,7 +15,7 @@ const CreateSubscription = () => {
 
   useEffect(() => {
     // Retrieve user data from local storage
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
@@ -41,7 +41,9 @@ const CreateSubscription = () => {
     }
   };
   const { data, isLoading, error } = useSWR("subscriptioPlanCourse", fetcher);
-
+  console.log("Data:", data);
+  console.log("User:", user);
+  
   return (
     <>
       <Head>
@@ -49,12 +51,14 @@ const CreateSubscription = () => {
       </Head>
       <Header />
       <p>this is your subscription</p>
+      
       <section className="w-50">
         {error && <p className="text-danger">{error}</p>}
         {isLoading && <p className="text-green-800">Loading...</p>}
-        {data && user &&(
+        {data && user && (
           <SubscriptionForm subscriptionPlan={data.subscriptionPlan} user={user} />
         )}
+        
       </section>
     </>
   );

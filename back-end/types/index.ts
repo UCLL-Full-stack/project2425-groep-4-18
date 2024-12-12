@@ -40,6 +40,7 @@ type SubscriptionPlanInput = {
 }
 
 type AuthenticationResponse = {
+  id?: number;
   token: string;
   firstname: string;
   fullname: string;

@@ -46,6 +46,7 @@ const authenticateUser = async ({firstname,password}:{firstname:string,password:
       throw new Error(`Invalid credentials`)
   }
   return {
+      id: user.getId(),
       firstname: user.getFirstname(),
       token: generateJwtToken({firstname:user.getFirstname(),role:user.getRole()}),
       fullname: `${user.getFirstname()} ${user.getname()}`,
