@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import Language from "./language/Language";
 import router from "next/router";
 
@@ -11,6 +11,7 @@ type UserType = {
 };
 const Header: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
@@ -54,32 +55,32 @@ const Header: React.FC = () => {
           href="/"
           className="px-4 text-xl text-white  hover:bg-gray-600 rounded-lg"
         >
-          Home
+          {t("header.home")}
         </Link>
         <Link
           href="/subscriptionPlan"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
-          subscription
+          {t("header.subscription")}
         </Link>
         <Link
           href="/create"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
-          create
+           {t("header.create")}
         </Link>
         <Link
           href="/profile"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
-          Profile
+           {t("header.profile")}
         </Link>
         {!loggedInUser && (
           <Link
             href="/login"
             className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
           >
-            Login
+             {t("header.login")}
           </Link>
         )}
         {loggedInUser && (
@@ -88,7 +89,7 @@ const Header: React.FC = () => {
             onClick={handleClick}
             className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
           >
-            logout
+             {t("header.logout")}
           </a>
         )}
         {loggedInUser && (

@@ -3,6 +3,8 @@ import SubscriptionPlanTable from "@/components/subscription/subscriptionPlanTab
 import subscriptionPlanService from "@/services/subscriptionPlanService";
 import userService from "@/services/userService";
 import { SubscriptionPlan } from "@/types";
+import { GetServerSidePropsContext } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
@@ -53,6 +55,14 @@ const Register: React.FC = () => {
       </div>
     </>
   );
+};
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default Register;

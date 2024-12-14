@@ -1,0 +1,17 @@
+{
+  "app.title": "chat App",
+  "header": {
+    "home": "Home",
+    "subscription": "Abonnement",
+    "create": "Creëren",
+    "profile": "Profiel",
+    "login": "Inloggen",
+    "logout": "Uitloggen",
+    "language": "Taal"
+  },
+  "chat":{
+    "select": "Selecteer een groepschat om berichten te bekijken.",
+    "typeInput": "Typ een bericht...",
+    "send": "Stuur"
+  }
+}

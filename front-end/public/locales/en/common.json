@@ -1,0 +1,17 @@
+{
+  "app.title": "chat App en",
+  "header": {
+    "home": "Home",
+    "subscription": "Subscription",
+    "create": "Create",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "chat":{
+    "select": "Select a group chat to view messages.",
+    "typeInput": "Type a message...",
+    "send": "Send"
+  }
+}

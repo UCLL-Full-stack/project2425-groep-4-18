@@ -8,10 +8,15 @@ import groupchatservice from "@/services/groupchatService";
 import chatService from "@/services/chatService";
 import { Chat, ChatInput, GroupChat, SessionUser, User } from "@/types";
 import useInterval from "use-interval";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetServerSidePropsContext } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 export default function Home() {
+  const { t } = useTranslation(); 
   const [selectedGroupChat, setSelectedGroupChat] = useState<GroupChat | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
 
@@ -112,7 +117,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Chat App</title>
+        <title>{t('app.title')}</title>
         <meta name="description" content="Chat Application" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -120,7 +125,7 @@ export default function Home() {
 
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 w-full z-10">
-        <Header />
+      <Header></Header>
       </div>
 
       <div className="flex h-screen pt-[4rem]">
@@ -153,7 +158,7 @@ export default function Home() {
                   </div>
                 ))
               ) : (
-                <div className="text-gray-500">Select a group chat to view messages.</div>
+                <div className="text-gray-500">{t('chat.select')}</div>
               )}
             </div>
           </div>
@@ -163,14 +168,14 @@ export default function Home() {
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
-                placeholder="Type a message..."
+                placeholder={t('chat.typeInput')}
                 className="w-full p-4 border rounded-md"
               />
               <button
                 type="submit"
                 className="bg-blue-500 text-white p-4 rounded-md mt-4"
               >
-                Send
+                {t('chat.send')}
               </button>
             </form>
           </div>
@@ -179,3 +184,14 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
+};
+
+
