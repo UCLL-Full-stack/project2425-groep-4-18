@@ -2,11 +2,12 @@ import userService from "@/services/userService";
 import { Role, StatusMessage } from "@/types";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
 import router from "next/router";
 import React, { useState } from "react";
 
 const LoginForm: React.FC = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [firstname, setName] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
@@ -79,8 +80,9 @@ const LoginForm: React.FC = () => {
       onSubmit={handleSubmit}
       className="max-w-lg mx-auto mt-16 p-8 bg-white rounded-lg shadow-md"
     >
-      
-      <h2 className="text-2xl font-bold text-center mb-6">{t("login.title")}</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">
+        {t("login.title")}
+      </h2>
       <div className="grid gap-4">
         <div>
           <label
@@ -124,6 +126,12 @@ const LoginForm: React.FC = () => {
         >
           {t("login.title")}
         </button>
+        <Link
+          href="/register"
+          className=" text-blue-500 underline"
+        >
+          create a account
+        </Link>
       </div>
       {statusMessage && (
         <div className="row">

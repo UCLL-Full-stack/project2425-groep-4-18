@@ -4,12 +4,14 @@ import LoginForm from "../../components/login_register/loginform";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSidePropsContext } from "next";
 import Header from "@/components/header";
+import Link from "next/link";
 
 const Register: React.FC = () => {
   return (
     <>
       <Header></Header>
       <LoginForm />
+      
     </>
   );
 };
