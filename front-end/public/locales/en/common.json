@@ -13,5 +13,14 @@
     "select": "Select a group chat to view messages.",
     "typeInput": "Type a message...",
     "send": "Send"
+  },
+  "login":{
+    "title": "Login",
+    "name": "Name",
+    "nameInput": "Enter your name",
+    "nameError": "name needs to be filled in.",
+    "password": "Password",
+    "passwordInput": "Enter your Password",
+    "passwordError": "Password needs to be filled in."
   }
 }

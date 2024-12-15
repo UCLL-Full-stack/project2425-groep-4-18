@@ -1,10 +1,12 @@
 import userService from "@/services/userService";
 import { Role, StatusMessage } from "@/types";
 import classNames from "classnames";
+import { useTranslation } from "next-i18next";
 import router from "next/router";
 import React, { useState } from "react";
 
 const LoginForm: React.FC = () => {
+  const { t } = useTranslation(); 
   const [firstname, setName] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
@@ -21,12 +23,12 @@ const LoginForm: React.FC = () => {
     let result = true;
 
     if (!firstname && firstname.trim() === "") {
-      setNameError("name needs to be filled in");
+      setNameError(t("login.nameError"));
       result = false;
     }
 
     if (!password && password.trim() === "") {
-      setPasswordError("Password needs to be filled in");
+      setPasswordError(t("login.passwordError"));
       result = false;
     }
 
@@ -78,20 +80,20 @@ const LoginForm: React.FC = () => {
       className="max-w-lg mx-auto mt-16 p-8 bg-white rounded-lg shadow-md"
     >
       
-      <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">{t("login.title")}</h2>
       <div className="grid gap-4">
         <div>
           <label
             htmlFor="name"
             className="block text-gray-700 font-medium mb-2"
           >
-            Name
+            {t("login.name")}
           </label>
           <input
             id="name"
             type="text"
             value={firstname}
-            placeholder="Enter your name"
+            placeholder={t("login.nameInput")}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -102,13 +104,13 @@ const LoginForm: React.FC = () => {
             htmlFor="password"
             className="block text-gray-700 font-medium mb-2"
           >
-            Password
+            {t("login.password")}
           </label>
           <input
             id="password"
             type="password"
             value={password}
-            placeholder="Enter your password"
+            placeholder={t("login.passwordInput")}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -120,7 +122,7 @@ const LoginForm: React.FC = () => {
           type="submit"
           className="w-full bg-blue-500 text-white font-medium text-lg p-2 rounded-md hover:bg-blue-600"
         >
-          Login
+          {t("login.title")}
         </button>
       </div>
       {statusMessage && (

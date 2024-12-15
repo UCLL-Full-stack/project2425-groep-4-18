@@ -13,5 +13,14 @@
     "select": "Selecteer een groepschat om berichten te bekijken.",
     "typeInput": "Typ een bericht...",
     "send": "Stuur"
+  },
+  "login":{
+    "title": "Inloggen",
+    "name": "Naam",
+    "nameInput": "Vul uw naam in",
+    "nameError": "naam moet worden ingevuld.",
+    "password": "Wachtwoord",
+    "passwordInput": "Vul uw Wachtwoord in",
+    "passwordError": "Wachtwoord moet worden ingevuld."
   }
 }
