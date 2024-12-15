@@ -5,6 +5,8 @@ import { User, GroupChat } from '@/types'; // Import types
 import userService from '@/services/userService';
 import groupchatservice from '@/services/groupchatService';
 import Header from '@/components/header';
+import { GetServerSidePropsContext } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 // Fetcher function to get the users
 const fetchUsers = async (): Promise<User[]> => {
@@ -62,6 +64,14 @@ const CreateChatPage: React.FC = () => {
       <CreateChatForm users={users || []}/>
     </>
   );
+};
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default CreateChatPage;
