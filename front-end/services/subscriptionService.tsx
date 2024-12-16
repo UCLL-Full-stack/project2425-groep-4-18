@@ -15,8 +15,24 @@ const CreateSubscription = (subscription: Subscription) => {
   });
 };
 
+const getSubscriptionByFistname = (firstname:string) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
+  const res = fetch(process.env.NEXT_PUBLIC_API_URL + `/subscription/user?firstname=${firstname}`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res);
+  return res;
+};
+
 const subscriptionService = {
   CreateSubscription,
+  getSubscriptionByFistname
 };
 
 export default subscriptionService;

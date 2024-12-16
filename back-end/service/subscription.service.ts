@@ -35,7 +35,17 @@ const createSubscriptions = async ({
     return await subscriptionDb.createSubscription(subscription);
 };
 
+const getSubscriptionPlanByUserName = async (firstname: string) => {
+    const user = await userDb.getUserByFirstname(firstname);
+    if (!user) {
+        throw new Error(`User with firstname ${firstname} does not exist.`);
+    }
+    console.log(user);
+    return subscriptionDb.getSubscriptionPlanByUserName(firstname);
+} 
+
 export default {
     getAllSubscriptions,
     createSubscriptions,
+    getSubscriptionPlanByUserName
 };

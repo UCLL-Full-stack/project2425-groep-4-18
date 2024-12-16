@@ -98,4 +98,46 @@ subscriptionRouter.post('/', async (req: Request, res: Response, next: NextFunct
     }
 });
 
+
+/**
+ * @swagger
+ * /subscription/user:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get Subscription by user firstname
+ *     tags:
+ *       - Subscription
+ *     parameters:
+ *       - in: query
+ *         name: firstname
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The firstname of the user whose Subscription you want to fetch
+ *     responses:
+ *       200:
+ *         description: List of Subscription for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Subscription'
+ */
+
+
+
+subscriptionRouter.get('/user', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { firstname } = req.query; // Extract from query
+      console.log(firstname);
+      const groupchats = await subscriptionService.getSubscriptionPlanByUserName(firstname as string);
+      res.json(groupchats);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
+
 export { subscriptionRouter };

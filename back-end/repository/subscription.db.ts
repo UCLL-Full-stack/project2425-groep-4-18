@@ -36,4 +36,20 @@ const createSubscription = async (subscription: Subscription): Promise<Subscript
     }
 };
 
-export default { getAllSubscriptions, createSubscription };
+const getSubscriptionPlanByUserName = async (firstname: string) => {
+    try {
+        const subscriptionPrisma = await database.subscription.findMany({
+            where: { user: { firstname: firstname } },
+            include: {
+                subscriptionPlan: true,
+                user: true
+            },
+        });
+        return subscriptionPrisma.map((subscriptionPrisma) => Subscription.from(subscriptionPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+export default { getAllSubscriptions, createSubscription, getSubscriptionPlanByUserName };
