@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Language from "./language/Language";
 import router from "next/router";
+import Dropdown from "./profile/dropdown";
+import styles from "@/styles/Home.module.css";
 
 type UserType = {
   firstname: string;
@@ -36,7 +38,7 @@ const Header: React.FC = () => {
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
   }, [loggedInUser]);
-  
+
   function isTokenExpired() {
     const expiry = JSON.parse(atob(loggedInUser!.token.split(".")[1])).exp;
     return Math.floor(new Date().getTime() / 1000) >= expiry;
@@ -67,39 +69,20 @@ const Header: React.FC = () => {
           href="/create"
           className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
         >
-           {t("header.create")}
-        </Link>
-        <Link
-          href="/profile"
-          className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-        >
-           {t("header.profile")}
+          {t("header.create")}
         </Link>
         {!loggedInUser && (
           <Link
             href="/login"
             className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
           >
-             {t("header.login")}
+            {t("header.login")}
           </Link>
-        )}
-        {loggedInUser && (
-          <a
-            href="/login"
-            onClick={handleClick}
-            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
-          >
-             {t("header.logout")}
-          </a>
-        )}
-        {loggedInUser && (
-          <div className="text-white ms-5 mt-2 md:mt-0 pt-1 md:pt-0 grow">
-            {loggedInUser.firstname}
-          </div>
         )}
         <div>
           <Language />
         </div>
+        <div className="flex justify-end">{loggedInUser && <Dropdown />}</div>
       </nav>
     </header>
   );
