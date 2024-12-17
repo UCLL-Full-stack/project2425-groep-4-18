@@ -50,15 +50,18 @@ const userRouter = express.Router();
 
 
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/', async (req: Request & { auth: any }, res: Response, next: NextFunction) => {
 try {
-    const users = await userservice.getAllUsers();
+    const { role,firstname } = req.auth;
+    const users = await userservice.getAllUsers({role,firstname});
     res.json(users);
   } catch (error) {
     next(error);
     
   }
 });
+
+
 
 /**
  * @swagger

@@ -180,4 +180,44 @@ chatRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
   }
 });
 
+/**
+ * @swagger
+ * /chats/{id}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Delete a chat by ID
+ *     tags:
+ *       - Chats
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: Chat ID to delete.
+ *     responses:
+ *       200:
+ *         description: The chat was successfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Chat'
+ *       404:
+ *         description: Chat not found.
+ */
+
+
+
+chatRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+      const id = parseInt(req.params.id, 10); 
+      const chat = await chatservice.deleteChat(id); 
+      res.status(200).json(chat); 
+  } catch (error) {
+      next(error) 
+  }
+});
+
 export { chatRouter };

@@ -57,12 +57,24 @@ const creategroupchat = (groupchat: GroupChatInput) => {
   });
 }
 
+const deleteGroupChat = (groupChatId: number) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/groupchats/${groupChatId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 
 const groupchatservice = {
   getGroupchats,
   addchat,
   getGroupChatById,
   creategroupchat,
+  deleteGroupChat,
 };
 
 export default groupchatservice;

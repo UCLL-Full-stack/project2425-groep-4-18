@@ -8,7 +8,20 @@ import bcrypt from 'bcrypt'
 
 
 
-const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
+const getAllUsers = async ({firstname,role}: {firstname:string,role:string}): Promise<User[]> => {
+  if(role === 'admin'){
+    return userDB.getAllUsers();
+  }
+  if(role === 'lecturer'){
+    return userDB.getAllStudentAndLectures();
+  }
+  if(role === 'student'){
+    return userDB.getAllStudent();
+  }
+  else{
+    throw new Error('Unauthorized');
+  }
+}
 
 const getUserById = async ({id}: {id:number}) => {
   if (!id) {

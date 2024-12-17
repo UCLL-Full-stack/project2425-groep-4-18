@@ -49,6 +49,14 @@ const getGroupchatbyFirstname = async (firstname: string) => {
     return groupChatDB.getGroupchatbyFirstname(firstname);
 }
 
+const deleteGroupChat = async (id: number) => {
+    const groupChat = await groupChatDB.getGroupChatById(id);
+    if (!groupChat) {
+        throw new Error(`GroupChat with id ${id} does not exist.`);
+    }
+    return groupChatDB.deleteGroupChat(id);
+}
+
 
 
 export default {
@@ -56,5 +64,6 @@ export default {
     getGroupChatById,
     createGroupChat,
     addchattoGroupChat,
-    getGroupchatbyFirstname
+    getGroupchatbyFirstname,
+    deleteGroupChat
 };

@@ -111,10 +111,30 @@ const getGroupchatbyFirstname = async (firstname: string) => {
     }
 }
 
+const deleteGroupChat = async (id: number) => {
+    try {
+        const groupChatPrisma = await database.groupChat.delete({
+            where: { id },
+            include: { 
+                chats: {
+                    include: {
+                        user: true,
+                    },
+                },
+             },
+        });
+        return groupChatPrisma ? GroupChat.from(groupChatPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllGroupChats,
     getGroupChatById,
     createGroupChat,
     addchattoGroupChat,
-    getGroupchatbyFirstname
+    getGroupchatbyFirstname,
+    deleteGroupChat
 };

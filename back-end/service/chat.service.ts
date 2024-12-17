@@ -40,9 +40,21 @@ const createChat = async (chat: ChatInput) => {
 
     return chatDB.createChat(newChat);
 }
+
+
+
+const deleteChat = async (id: number) => {
+    const chat = await chatDB.getChatById(id);
+    if (!chat) {
+        throw new Error(`Chat with id ${id} does not exist.`);
+    }
+    return chatDB.deleteChat(id);
+}
+
 export default {
     getAllChat,
     getChatByUserId,
     getChatById,
-    createChat
+    createChat,
+    deleteChat
 };

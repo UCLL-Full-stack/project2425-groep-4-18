@@ -24,7 +24,7 @@ const main = async () => {
     const UserJ = await prisma.user.create({
         data: {
             id: 1,
-            role: 'user', // or 'admin' if needed
+            role: 'student', // or 'admin' if needed
             name: 'Doe',
             firstname: 'John',
             password: await bcrypt.hash('password', 12),

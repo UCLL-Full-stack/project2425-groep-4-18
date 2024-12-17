@@ -6,14 +6,16 @@ import groupchatservice from '@/services/groupchatService';
 
 type Props = {
   users: Array<User>;
-};
+  };
+
 
 const CreateGroupChat = ({ users }: Props) => {
   console.log('Users prop:', users); // Debugging users prop
   const [chatids, setChatids] = useState<number[]>([]);
   const [groupChatName, setGroupChatName] = useState<string>(''); 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-  const [loggedInUser, setLoggedInUser] = useState<SessionUser | null>(null); // Nullable to handle loading state
+  const [loggedInUser, setLoggedInUser] = useState<SessionUser | null>(null); 
+  const [statusMessage, setStatusMessage] = useState<string>(''); 
 
   useEffect(() => {
     const storedUser = window.localStorage.getItem("loggedInUser");
@@ -45,8 +47,11 @@ const CreateGroupChat = ({ users }: Props) => {
 
     if (!groupChatName || selectedUsers.length === 0) {
       console.error('Group chat name and users are required');
+      setStatusMessage('Please provide a group chat name and select users.');
       return;
     }
+
+    setStatusMessage('Creating group chat...'); // Show loading status message
 
     try {
       // 1. Create the group chat first
@@ -85,12 +90,14 @@ const CreateGroupChat = ({ users }: Props) => {
             }
           }
         }
+
+        setStatusMessage('Group chat created successfully!'); // Success message
       }
     } catch (error) {
       console.error('Error during group chat creation:', error);
-    }
+      setStatusMessage('Error creating group chat. Please try again.'); // Error message
   };
-
+}
 
   return (
     <form onSubmit={handleSubmit}>
@@ -119,10 +126,10 @@ const CreateGroupChat = ({ users }: Props) => {
             onChange={handleUserChange}
           >
             {users
-              .filter(user => user.firstname !== loggedInUser?.firstname) // Exclude logged-in user if loggedInUser is defined
+              .filter(user => user.firstname !== loggedInUser?.firstname) 
               .map(user => (
                 <option key={user.id} value={user.firstname}>
-                  {user.firstname} {user.name}
+                  {user.firstname} {user.name} {user.role}
                 </option>
               ))}
           </select>
@@ -131,17 +138,24 @@ const CreateGroupChat = ({ users }: Props) => {
         <p>Loading users...</p> // Display a message if users are still being fetched
       )}
 
-      {/* Submit Button */}
-      <div className="flex justify-center">
+    <div className="flex justify-center mt-4">
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-lg mt-4"
+          className="bg-blue-500 text-white p-2 rounded-lg"
         >
           Create Group Chat
         </button>
       </div>
+
+    
+      {statusMessage && (
+        <div className="mt-4 p-4 bg-gray-100 rounded-md">
+          <p className="text-center text-sm text-gray-700">{statusMessage}</p>
+        </div>
+      )}
     </form>
   );
 };
+
 
 export default CreateGroupChat;

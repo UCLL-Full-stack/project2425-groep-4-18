@@ -235,7 +235,49 @@ groupchatRouter.post('/user', async (req: Request, res: Response, next: NextFunc
   } catch (error) {
     next(error);
   }
-}
-);
+});
+
+
+
+/**
+ * @swagger
+ * /groupchats/{id}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Delete group chat by id
+ *     tags:
+ *       - GroupChats
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: Group chat id
+ *     responses:
+ *       200:
+ *         description: The group chat was successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GroupChat'
+ *       404:
+ *         description: Group chat not found
+ *       500:
+ *         description: Some server error
+ */
+
+
+groupchatRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id);
+    const groupChat = await groupchatservice.deleteGroupChat(id);
+    res.json(groupChat);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export { groupchatRouter };

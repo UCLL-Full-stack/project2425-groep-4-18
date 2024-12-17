@@ -6,17 +6,14 @@ import ChatOverview from "@/components/chats/chatsoverview";
 import useSWR, { mutate } from "swr";
 import groupchatservice from "@/services/groupchatService";
 import chatService from "@/services/chatService";
-import { Chat, ChatInput, GroupChat, SessionUser, User } from "@/types";
+import { Chat, ChatInput, GroupChat, SessionUser } from "@/types";
 import useInterval from "use-interval";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSidePropsContext } from "next";
 
-const inter = Inter({ subsets: ["latin"] });
-
-
 export default function Home() {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [selectedGroupChat, setSelectedGroupChat] = useState<GroupChat | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
 
@@ -48,26 +45,24 @@ export default function Home() {
     return null;
   };
 
-
-
   const { data, isLoading, error } = useSWR("groupchats", groupfetcher);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedGroupChat || !user?.firstname) return;
-  
+
     const form = event.currentTarget;
     const input = form.querySelector("input");
-  
+
     if (input && input.value) {
       const message = input.value;
-  
+
       const chat: ChatInput = {
         message,
         user: user.firstname,
         createdAt: new Date(),
       };
-  
+
       try {
         const res = await chatService.addChat(chat);
         if (res.ok) {
@@ -88,8 +83,8 @@ export default function Home() {
               }
               return currentData;
             });
-              input.value = "";
-          } 
+            input.value = "";
+          }
         }
       } catch (error) {
         console.error("Error sending message:", error);
@@ -97,15 +92,43 @@ export default function Home() {
     }
   };
 
+  const handleDeleteChat = async (chatId: number) => {
+    if (!selectedGroupChat || !user) return;
+    try {
+      const res = await chatService.deleteChat(chatId);
+      if (res.ok) {
+        setSelectedGroupChat((prev) => {
+          if (prev) {
+            const updatedChats = prev.chats.filter((chat) => chat.id !== chatId);
+            return { ...prev, chats: updatedChats };
+          }
+          return prev;
+        });
+        mutate("groupchats", (currentData: any) => {
+          if (currentData) {
+            return {
+              groupchats: currentData.groupchats.map((group: GroupChat) =>
+                group.id === selectedGroupChat.id
+                  ? { ...group, chats: group.chats.filter((chat: Chat) => chat.id !== chatId) }
+                  : group
+              ),
+            };
+          }
+          return currentData;
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting chat message:", error);
+    }
+  };
+
   useInterval(() => {
     mutate("groupchats", (currentData: any) => {
       if (currentData && selectedGroupChat) {
-        // Find the updated group chat
         const updatedGroupChat = currentData.groupchats.find(
           (group: GroupChat) => group.id === selectedGroupChat.id
         );
-  
-        // Update the selectedGroupChat state if necessary
+
         if (updatedGroupChat) {
           setSelectedGroupChat(updatedGroupChat);
         }
@@ -123,13 +146,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Fixed Header */}
       <div className="fixed top-0 left-0 w-full z-10">
-      <Header></Header>
+        <Header />
       </div>
 
       <div className="flex h-screen pt-[4rem]">
-        {/* Fixed Sidebar */}
         <div className="w-1/4 bg-gray-200 border-r border-gray-300 fixed top-[4rem] bottom-0">
           <ChatOverview
             groupchats={data?.groupchats || []}
@@ -138,9 +159,7 @@ export default function Home() {
           />
         </div>
 
-        {/* Main Chat Area */}
         <div className="ml-[25%] flex-1 flex flex-col h-full">
-          {/* Scrollable Chat Content */}
           <div className="flex-grow overflow-y-auto p-6">
             <div className="flex flex-col gap-4">
               {selectedGroupChat ? (
@@ -155,6 +174,15 @@ export default function Home() {
                   >
                     <div className="text-sm font-medium">{chat.user.firstname}</div>
                     <div className="text-lg">{chat.message}</div>
+
+                    {chat.user.firstname === user?.firstname && (
+                      <button
+                        onClick={() => handleDeleteChat(chat.id)}
+                        className="text-red-500 mt-2"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 ))
               ) : (
@@ -163,7 +191,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Input Area */}
           <div className="p-6 border-t border-gray-300">
             <form onSubmit={handleSubmit}>
               <input
@@ -193,5 +220,3 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     },
   };
 };
-
-

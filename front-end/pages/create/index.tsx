@@ -7,6 +7,7 @@ import groupchatservice from '@/services/groupchatService';
 import Header from '@/components/header';
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';  // Import useRouter for redirection
 
 // Fetcher function to get the users
 const fetchUsers = async (): Promise<User[]> => {
@@ -27,26 +28,31 @@ const fetchGroupChats = async (user: User): Promise<GroupChat[]> => {
 };
 
 const CreateChatPage: React.FC = () => {
-  // Fetching users using useSWR
+  const router = useRouter();  // Initialize useRouter for redirection
   const { data: users, error: usersError, isLoading: usersLoading } = useSWR<User[]>('users', fetchUsers);
-
-  // State to store group chats
   const [groupchats, setGroupchats] = useState<GroupChat[]>([]);
 
-  // Fetch group chats only when users are loaded and the first user is available
   useEffect(() => {
-    if (users && users.length > 0) {
-      const fetchChats = async () => {
-        try {
-          const chats = await fetchGroupChats(users[0]); // Fetch group chats for the first user
-          setGroupchats(chats);
-        } catch (error) {
-          console.error('Error fetching group chats:', error);
-        }
-      };
-      fetchChats();
+    const storedUser = window.localStorage.getItem("loggedInUser");
+
+    if (!storedUser) {
+      // Redirect to login page if no user is logged in
+      router.push("/login");
+    } else {
+      // If a user is logged in, fetch group chats for the first user
+      if (users && users.length > 0) {
+        const fetchChats = async () => {
+          try {
+            const chats = await fetchGroupChats(users[0]); // Fetch group chats for the first user
+            setGroupchats(chats);
+          } catch (error) {
+            console.error('Error fetching group chats:', error);
+          }
+        };
+        fetchChats();
+      }
     }
-  }, [users]); // Fetch group chats only when users data is loaded
+  }, [users, router]); // Re-run the effect when users data is loaded or when the router changes
 
   if (usersLoading) {
     return <p>Loading users...</p>;
@@ -65,6 +71,7 @@ const CreateChatPage: React.FC = () => {
     </>
   );
 };
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { locale } = context;
   return {

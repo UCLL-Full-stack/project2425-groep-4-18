@@ -17,8 +17,20 @@ const addChat = (chat:ChatInput) => {
   return res;
 };
 
+const deleteChat = (chatId: number) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/chats/${chatId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 const chatService = {
   addChat,
+  deleteChat,
 };
 
 export default chatService;

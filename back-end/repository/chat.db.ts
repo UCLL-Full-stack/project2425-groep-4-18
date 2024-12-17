@@ -83,4 +83,17 @@ const createChat = async (chat: Chat): Promise<Chat> => {
     }
 };
 
-export default { getAllChats, getChatByUserId, getChatById, createChat };
+
+const deleteChat = async (id: number) => {
+    try {
+        const chat = await database.chat.delete({
+            where: { id: id }
+        });
+        return chat;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+export default { getAllChats, getChatByUserId, getChatById, createChat, deleteChat };

@@ -76,4 +76,41 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
-export default { getAllUsers, getUserById, createUser, getUserByFirstname };
+const getAllStudentAndLectures = async (): Promise<User[]> => {
+    try {
+        const userPrisma = await database.user.findMany({
+            where: {
+                role: {
+                    in: ['student', 'lecturer'],
+                },
+            },
+            include: {
+                chats: true,
+            },
+        });
+        return userPrisma.map((userPrisma) => User.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const getAllStudent = async (): Promise<User[]> => {
+    try {
+        const userPrisma = await database.user.findMany({
+            where: {
+                role: 'student',
+            },
+            include: {
+                chats: true,
+            },
+        });
+        return userPrisma.map((userPrisma) => User.from(userPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+
+export default { getAllUsers, getUserById, createUser, getUserByFirstname,getAllStudentAndLectures,getAllStudent };
