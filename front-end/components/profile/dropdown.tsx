@@ -5,15 +5,15 @@ import { useTranslation } from "next-i18next";
 import router from "next/router";
 
 type UserType = {
-    firstname: string;
-    password: string;
-    token: string;
-  };
+  firstname: string;
+  password: string;
+  token: string;
+};
 const Dropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
   const { t } = useTranslation();
-  
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -43,16 +43,16 @@ const Dropdown: React.FC = () => {
         <div className="h-8 w-8 bg-gray-400 text-black rounded-full flex items-center justify-center">
           {loggedInUser ? getFirstLetter(loggedInUser.firstname) : ""}
         </div>
-        
       </button>
       <ul className={`${styles.dropdownMenu} ${!isOpen ? styles.hidden : ""}`}>
-        <li>my subscription</li>
         <li>
-        <a
-            href="/login"
-            onClick={handleClick}
-          >
-             {t("header.logout")}
+          <a href="/mySubscription">
+            my subscription
+          </a>
+        </li>
+        <li>
+          <a href="/login" onClick={handleClick}>
+            {t("header.logout")}
           </a>
         </li>
       </ul>

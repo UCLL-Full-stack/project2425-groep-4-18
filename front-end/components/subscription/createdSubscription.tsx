@@ -27,7 +27,7 @@ const SubscriptionForm  = ({ subscriptionPlan, user }: Props) => {
   };
   return (
     <div>
-      {errors.length > 0 && <p className="text-danger">{errors.join(", ")}</p>}
+      {errors.length > 0 && <p className="text-danger text-red-500">{errors.join(", ")}</p>}
       {status && <p className="text-success">{status}</p>}
       
       <button onClick={handleSubscription} className="btn btn-primary">

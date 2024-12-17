@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { User } from "@/types";
+import { GetServerSidePropsContext } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const CreateSubscription = () => {
   const router = useRouter();
@@ -50,7 +52,7 @@ const CreateSubscription = () => {
         <title>New subscription</title>
       </Head>
       <Header />
-      <p>this is your subscription</p>
+      <p>are you sure you wanna buy</p>
       
       <section className="w-50">
         {error && <p className="text-danger">{error}</p>}
@@ -62,6 +64,16 @@ const CreateSubscription = () => {
       </section>
     </>
   );
+};
+
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default CreateSubscription;

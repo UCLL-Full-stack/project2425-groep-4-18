@@ -27,6 +27,8 @@ const createSubscriptions = async ({
 
     if (!user) throw new Error('User not found');
     if (!subscriptionPlan) throw new Error('subscriptionPlan not found');
+    const existing = await subscriptionDb.getSubscriptionPlanByUserName(user.getFirstname())
+    if (existing) throw new Error("user already has a subscription")
 
 
     const startDate = new Date()
