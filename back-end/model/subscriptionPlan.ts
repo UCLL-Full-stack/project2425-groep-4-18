@@ -16,7 +16,7 @@ export class SubscriptionPlan {
         price,
         duration,
     }: {
-        id: number;
+        id?: number;
         type: Type;
         description: string;
         price: number;
