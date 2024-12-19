@@ -112,5 +112,21 @@ const getAllStudent = async (): Promise<User[]> => {
     }
 }
 
+const deleteUser = async (id: number): Promise<User | undefined> => {
+    try {
+        const userPrisma = await database.user.delete({
+            where: { id },
+            include: {
+                chats: true,
+            },
+            
+        });
+        return userPrisma ? User.from(userPrisma) : undefined;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
 
-export default { getAllUsers, getUserById, createUser, getUserByFirstname,getAllStudentAndLectures,getAllStudent };
+
+export default { getAllUsers, getUserById, createUser, getUserByFirstname,getAllStudentAndLectures,getAllStudent,deleteUser };

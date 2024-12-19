@@ -8,9 +8,13 @@ import Header from '@/components/header';
 import { GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';  // Import useRouter for redirection
+import { useTranslation } from 'react-i18next';
 
 // Fetcher function to get the users
 const fetchUsers = async (): Promise<User[]> => {
+
+  const { t } = useTranslation();
+
   const response = await userService.getUsers();
   if (!response.ok) {
     throw new Error('Failed to fetch users');
@@ -36,14 +40,14 @@ const CreateChatPage: React.FC = () => {
     const storedUser = window.localStorage.getItem("loggedInUser");
 
     if (!storedUser) {
-      // Redirect to login page if no user is logged in
+  
       router.push("/login");
     } else {
-      // If a user is logged in, fetch group chats for the first user
+     
       if (users && users.length > 0) {
         const fetchChats = async () => {
           try {
-            const chats = await fetchGroupChats(users[0]); // Fetch group chats for the first user
+            const chats = await fetchGroupChats(users[0]); 
             setGroupchats(chats);
           } catch (error) {
             console.error('Error fetching group chats:', error);
@@ -52,7 +56,7 @@ const CreateChatPage: React.FC = () => {
         fetchChats();
       }
     }
-  }, [users, router]); // Re-run the effect when users data is loaded or when the router changes
+  }, [users, router]); 
 
   if (usersLoading) {
     return <p>Loading users...</p>;

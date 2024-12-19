@@ -35,10 +35,23 @@ const getUsers = async () => {
   });
 }
 
+const deleteUser = async (userId: number) => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const token = loggedInUser ? JSON.parse(loggedInUser)?.token : null;
+  return fetch(`${URL}users/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 const userService = {
   registerUser,
   loginUser,
   getUsers,
+  deleteUser,
 }
 
 export default userService;

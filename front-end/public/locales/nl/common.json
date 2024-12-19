@@ -7,7 +7,8 @@
     "profile": "Profiel",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "language": "Taal"
+    "language": "Taal",
+    "users": "Gebruikers"
   },
   "chat":{
     "select": "Selecteer een groepschat om berichten te bekijken.",
@@ -16,7 +17,7 @@
   },
   "login":{
     "title": "Inloggen",
-    "name": "Naam",
+    "name": "Voornaam",
     "nameInput": "Vul uw naam in",
     "nameError": "naam moet worden ingevuld.",
     "password": "Wachtwoord",

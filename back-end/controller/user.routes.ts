@@ -193,4 +193,48 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 
 
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Delete a user
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: User id
+ *     responses:
+ *       200:
+ *         description: The user was successfully deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Some parameters may be invalid
+ *       500:
+ *         description: Internal error
+ *
+ */
+
+
+userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id);
+    const user = await userservice.deleteUser(id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
+);
+
+
+
 export { userRouter };

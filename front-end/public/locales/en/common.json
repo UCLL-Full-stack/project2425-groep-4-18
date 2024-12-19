@@ -7,7 +7,8 @@
     "profile": "Profile",
     "login": "Login",
     "logout": "Logout",
-    "language": "Language"
+    "language": "Language",
+    "users": "Users"
   },
   "chat":{
     "select": "Select a group chat to view messages.",
@@ -16,7 +17,7 @@
   },
   "login":{
     "title": "Login",
-    "name": "Name",
+    "name": "firstname",
     "nameInput": "Enter your name",
     "nameError": "name needs to be filled in.",
     "password": "Password",

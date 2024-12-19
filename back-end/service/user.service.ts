@@ -67,11 +67,20 @@ const authenticateUser = async ({firstname,password}:{firstname:string,password:
   }
 }
 
+
+const deleteUser = async (id: number) => {
+  if (!id) {
+    throw new Error('User ID is required');
+  }
+  return userDB.deleteUser(id);
+}
+
 export default
 { 
   getAllUsers,
   getUserById,
   createUser,
   authenticateUser,
-  getUserByName
+  getUserByName,
+  deleteUser
  };

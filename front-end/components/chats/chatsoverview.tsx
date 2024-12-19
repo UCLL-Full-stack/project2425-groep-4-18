@@ -20,7 +20,7 @@ const ChatOverview: React.FC<Props> = ({ groupchats, selectGroupChat, selectedGr
             className={`p-4 border-b border-gray-300 cursor-pointer ${
               selectedGroupChat?.id === groupchat.id ? 'bg-blue-200' : 'bg-white'
             }`} // Highlight if selected
-            onClick={() => selectGroupChat(groupchat)} // Handle group chat selection
+            onClick={() => selectGroupChat(groupchat)} 
           >
             {groupchat.name}
           </li>

@@ -5,6 +5,7 @@ import Language from "./language/Language";
 import router from "next/router";
 import Dropdown from "./profile/dropdown";
 import styles from "@/styles/Home.module.css";
+import { SessionUser } from "@/types";
 
 type UserType = {
   firstname: string;
@@ -12,7 +13,7 @@ type UserType = {
   token: string;
 };
 const Header: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<UserType | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<SessionUser | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -71,6 +72,14 @@ const Header: React.FC = () => {
         >
           {t("header.create")}
         </Link>
+        {loggedInUser?.role === "admin" && (
+          <Link
+            href="/users"
+            className="px-4 text-white text-xl hover:bg-gray-600 rounded-lg"
+          >
+            {t("header.users")}
+          </Link>
+        )}
         {!loggedInUser && (
           <Link
             href="/login"
@@ -79,6 +88,7 @@ const Header: React.FC = () => {
             {t("header.login")}
           </Link>
         )}
+        {}
         <div>
           <Language />
         </div>

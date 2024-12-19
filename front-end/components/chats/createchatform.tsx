@@ -10,7 +10,6 @@ type Props = {
 
 
 const CreateGroupChat = ({ users }: Props) => {
-  console.log('Users prop:', users); // Debugging users prop
   const [chatids, setChatids] = useState<number[]>([]);
   const [groupChatName, setGroupChatName] = useState<string>(''); 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -34,7 +33,6 @@ const CreateGroupChat = ({ users }: Props) => {
     const selectedUsersArray = users.filter(user =>
       user.firstname && selectedOptions.includes(user.firstname) && user.firstname !== loggedInUser?.firstname
     );
-    console.log('Selected Users:', selectedUsersArray); // Debug selected users
     setSelectedUsers(selectedUsersArray);
   };
 
