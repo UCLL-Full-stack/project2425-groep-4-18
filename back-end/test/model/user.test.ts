@@ -1,6 +1,6 @@
 import { User } from "../../model/user";
 
-test('given: user with all fields, when: creating user, then: user is created', () => {
+ 
   //when
   const user = new User({id: 1, role: 'admin', name: 'name', firstName: 'firstName', password: 'password'});
   //then
