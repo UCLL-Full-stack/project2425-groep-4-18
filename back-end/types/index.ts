@@ -1,5 +1,6 @@
 type Type = 'basic' | 'advanced' | 'max';
 type Role = 'lecturer' | 'student'| 'admin';
+
 type UserInput = {
   id?: number;
   password: string;
@@ -25,8 +26,8 @@ type GroupChatInput = {
 
 type subscriptionInput = { 
   id?: number;
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   user: UserInput;
   subscriptionPlan: SubscriptionPlanInput
 }
@@ -53,6 +54,7 @@ export {
   ChatInput,
   GroupChatInput,
   subscriptionInput,
+  SubscriptionPlanInput,
   AuthenticationResponse,
   Role
 }
