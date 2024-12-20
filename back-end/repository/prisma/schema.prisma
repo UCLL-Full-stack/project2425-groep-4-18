@@ -40,7 +40,7 @@ model Subscription {
   startDate          DateTime
   endDate            DateTime
   userId             Int              @unique
-  user               User             @relation(fields: [userId], references: [id])
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   subscriptionPlanId Int
   subscriptionPlan   SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
 }
