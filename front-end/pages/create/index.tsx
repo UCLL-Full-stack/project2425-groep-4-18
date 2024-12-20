@@ -13,8 +13,6 @@ import { useTranslation } from 'react-i18next';
 // Fetcher function to get the users
 const fetchUsers = async (): Promise<User[]> => {
 
-  const { t } = useTranslation();
-
   const response = await userService.getUsers();
   if (!response.ok) {
     throw new Error('Failed to fetch users');
@@ -35,7 +33,7 @@ const CreateChatPage: React.FC = () => {
   const router = useRouter();  // Initialize useRouter for redirection
   const { data: users, error: usersError, isLoading: usersLoading } = useSWR<User[]>('users', fetchUsers);
   const [groupchats, setGroupchats] = useState<GroupChat[]>([]);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const storedUser = window.localStorage.getItem("loggedInUser");
 
