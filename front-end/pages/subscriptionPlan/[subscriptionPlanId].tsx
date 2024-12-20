@@ -52,7 +52,6 @@ const CreateSubscription = () => {
         <title>New subscription</title>
       </Head>
       <Header />
-      <p>are you sure you wanna buy</p>
       
       <section className="w-50">
         {error && <p className="text-danger">{error}</p>}
