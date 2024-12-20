@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
+import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { chatRouter } from './controller/chat.routes';
@@ -11,6 +12,8 @@ import { expressjwt } from 'express-jwt';
 import { subscriptionRouter } from './controller/subscription.routes';
 import { subscriptionPlanRouter } from './controller/subscriptionPlan.routes';
 const app = express();
+
+app.use(helmet());
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
