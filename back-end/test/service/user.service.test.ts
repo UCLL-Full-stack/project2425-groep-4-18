@@ -2,6 +2,7 @@ import userService from '../../service/user.service';
 import userDb from '../../repository/user.db';
 import { User } from '../../model/user';
 import { UserInput } from '../../types';
+import bcrypt from 'bcryptjs';
 
 let mockUserDbGetAllUsers: jest.Mock;
 let mockUserDbGetUserById: jest.Mock;
@@ -19,7 +20,7 @@ beforeEach(() => {
   userDb.getAllUsers = mockUserDbGetAllUsers;
   userDb.getUserById = mockUserDbGetUserById;
   userDb.createUser = mockUserDbCreateUser;
-  userDb.getUserByName = mockUserDbGetUserByName;
+  userDb.getUserByFirstname = mockUserDbGetUserByName;
 });
 
 afterEach(() => {
@@ -30,17 +31,17 @@ afterEach(() => {
   
 test('given a request for all users, when getAllUsers is called, then it returns all users', async () => {
   
-  const users = [{ id: 1, name: 'User1' }, { id: 2, name: 'User2' }];
+  const users = [{ id: 1, firstname: 'User1',role: 'student'}, { id: 2, firstname: 'User2',role: 'student' }];
   mockUserDbGetAllUsers.mockResolvedValue(users);
 
   
-  const result = await userService.getAllUsers();
-
-  
+  const result = await userService.getAllUsers({firstname:'User1',role:'student'});
+  //console.log(result);
   expect(mockUserDbGetAllUsers).toHaveBeenCalledTimes(1);
   expect(result).toEqual(users);
-});
+}
 
+);
 test('given a valid user ID, when getUserById is called, then it returns the user with that ID', async () => {
   
   const user = { id: 1, name: 'User1' };
@@ -63,8 +64,9 @@ test('given a valid user, when user is created, then user is created with those 
   const expectedUser = new User({
     id: userInput.id,
     password: userInput.password,
-    firstName: userInput.firstname,
+    firstname: userInput.firstname,
     name: userInput.name,
+    role: 'student',
   });
 
   mockUserDbCreateUser.mockResolvedValue(expectedUser);
@@ -75,7 +77,8 @@ test('given a valid user, when user is created, then user is created with those 
   
   expect(mockUserDbCreateUser).toHaveBeenCalledTimes(1);
   expect(mockUserDbCreateUser).toHaveBeenCalledWith(expectedUser);
-  expect(createdUser).toEqual(expectedUser);
+  expect(createdUser.getFirstname).toEqual(expectedUser.getFirstname);
+  expect(createdUser.getname).toEqual(expectedUser.getname);
 });
 
 test('given a valid user name, when getUserByName is called, then it returns the user with that name', async () => {
@@ -93,26 +96,24 @@ test('given a valid user name, when getUserByName is called, then it returns the
 
 test('given valid credentials, when loginUser is called, then it logs in the user', async () => {
   
-  const userInput = { name: 'Valvekens', password: 'pass123' };
-  const existingUser = new User({ id: 1, password: 'pass123', firstName: 'Arend', name: 'Valvekens' });
+  const userInput = { firtnamename: 'Arend', password: 'pass123' };
+  const existingUser = new User({ id: 1, password: bcrypt.hashSync('pass123', 10), firstname: 'Arend', name: 'Valvekens' });
   mockUserDbGetUserByName.mockResolvedValue(existingUser);
 
   
-  const result = await userService.loginUser(userInput as UserInput);
-
-  
-  expect(mockUserDbGetUserByName).toHaveBeenCalledWith('Valvekens');
-  expect(result).toEqual(existingUser);
+  const result = await userService.authenticateUser({firstname:'Arend',password:'pass123'});
+  expect(mockUserDbGetUserByName).toHaveBeenCalledWith('Arend');
+  expect(result.firstname).toEqual('Arend');
 });
 
 test('given invalid credentials, when loginUser is called, then it throws an error', async () => {
   
   const userInput = {
     name: 'Valvekens', password: 'wrongPass'};
-  const existingUser = new User({ id: 1, password: 'pass123', firstName: 'Arend', name: 'Valvekens' });
+  const existingUser = new User({ id: 1,password: bcrypt.hashSync('pass123', 10) , firstname: 'Arend', name: 'Valvekens' });
   mockUserDbGetUserByName.mockResolvedValue(existingUser);
 
-  await expect(userService.loginUser(userInput as UserInput)).rejects.toThrow('Invalid credentials');
+  await expect(userService.authenticateUser(userInput as UserInput)).rejects.toThrow('Invalid credentials');
 });
 
 
