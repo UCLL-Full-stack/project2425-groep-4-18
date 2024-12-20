@@ -11,12 +11,15 @@ const Users: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [user, setUser] = useState<SessionUser | null>(null);
   const [statusMessage, setStatusMessage] = useState<StatusMessage | null>(null);
-
+  // Check if the user is loaded; if not, return a loading state
+  
   useEffect(() => {
     const storedUser = window.localStorage.getItem("loggedInUser");
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);  // Update the user state
+        mutate("users");  // Trigger SWR to refetch users
       } catch (error) {
         console.error("Error parsing logged in user:", error);
       }
@@ -28,7 +31,6 @@ const Users: React.FC = () => {
   };
 
   const fetcher = async () => {
-    if (!user?.firstname) return null;
     try {
       const res = await userService.getUsers();
       if (res.ok) {
@@ -43,8 +45,11 @@ const Users: React.FC = () => {
     }
     return null;
   };
-
-  const { data, isLoading, error } = useSWR("users", fetcher);
+  
+  const { data, isLoading, error } = useSWR(
+    user ? "users" : null, // Fetch only when user is available
+    fetcher
+  );
 
   const handleDelete = async (userId: number) => {
     try {
